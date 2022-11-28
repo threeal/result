@@ -1,3 +1,13 @@
 cmake_minimum_required(VERSION 3.14)
 
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
+
 project(result)
+
+if(BUILD_TESTING)
+  enable_testing()
+  find_package(googletest REQUIRED)
+  add_executable(result_test test/result_test.cpp)
+  target_link_libraries(result_test PRIVATE gtest_main)
+  gtest_discover_tests(result_test)
+endif()
