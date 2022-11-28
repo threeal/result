@@ -6,7 +6,10 @@ project(result)
 
 if(BUILD_TESTING)
   enable_testing()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -coverage")
+
   find_package(googletest REQUIRED)
+
   add_executable(result_test test/result_test.cpp)
   target_link_libraries(result_test PRIVATE gtest_main)
   gtest_discover_tests(result_test)
