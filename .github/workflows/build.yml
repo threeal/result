@@ -33,4 +33,12 @@ jobs:
         run: cmake --build build
 
       - name: Run tests
-        run: ctest --verbose --test-dir build
+        run: ctest --verbose --test-dir build --no-compress-output -T Test || true
+
+      - name: Send test result to Testspace
+        run: |
+          curl -fsSL https://testspace-client.s3.amazonaws.com/testspace-darwin.tgz | tar -zxvf- -C build
+          build/testspace config url ${{ secrets.TESTSPACE_URL }}
+          build/testspace config project ${{ secrets.TESTSPACE_PROJECT }}
+          build/testspace config space ${{ github.ref_name }}
+          build/testspace [Tests]"build/Testing/*/Test.xml"
