@@ -1,0 +1,56 @@
+name: build
+on:
+  workflow_dispatch:
+  push:
+    branches: ['**']
+jobs:
+  release:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout this repository
+        uses: actions/checkout@v2.5.0
+        with:
+          fetch-depth: 0
+
+      - name: Configure CMake
+        run: cmake -B build
+
+      - name: Build targets
+        run: cmake --build build
+
+  test:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout this repository
+        uses: actions/checkout@v2.5.0
+        with:
+          fetch-depth: 0
+
+      - name: Configure CMake
+        run: cmake -B build -D BUILD_TESTING=ON .
+
+      - name: Build targets
+        run: cmake --build build
+
+      - name: Run tests
+        run: ctest --verbose --test-dir build --no-compress-output -T Test || true
+
+      - name: Send test result to Testspace
+        run: |
+          curl -fsSL https://testspace-client.s3.amazonaws.com/testspace-darwin.tgz | tar -zxvf- -C build
+          build/testspace config url ${{ secrets.TESTSPACE_URL }}
+          build/testspace config project ${{ secrets.TESTSPACE_PROJECT }}
+          build/testspace config space ${{ github.ref_name }}
+          build/testspace [Tests]"build/Testing/*/Test.xml"
+
+      - name: Generate code coverage info
+        run: |
+          brew install lcov
+          lcov --directory . --capture --no-external --output-file build/coverage.info
+          lcov --remove build/coverage.info "*/build/*" --output-file build/coverage.info
+
+      - name: Send code coverage info to Coveralls
+        uses: coverallsapp/github-action@1.1.3
+        with:
+          path-to-lcov: build/coverage.info
+          github-token: ${{ secrets.GITHUB_TOKEN }}
