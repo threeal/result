@@ -1,0 +1,36 @@
+name: build
+on:
+  workflow_dispatch:
+  push:
+    branches: ['**']
+jobs:
+  release:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout this repository
+        uses: actions/checkout@v2.5.0
+        with:
+          fetch-depth: 0
+
+      - name: Configure CMake
+        run: cmake -B build
+
+      - name: Build targets
+        run: cmake --build build
+
+  test:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout this repository
+        uses: actions/checkout@v2.5.0
+        with:
+          fetch-depth: 0
+
+      - name: Configure CMake
+        run: cmake -B build -D BUILD_TESTING=ON .
+
+      - name: Build targets
+        run: cmake --build build
+
+      - name: Run tests
+        run: ctest --verbose --test-dir build
