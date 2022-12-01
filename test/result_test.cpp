@@ -3,13 +3,13 @@
 #include <string>
 
 TEST_CASE("ok test") {
-  res::Result<std::string> res = res::ok;
+  res::Result res = res::ok;
   REQUIRE(res.is_ok());
   REQUIRE_FALSE(res.is_err());
 }
 
 TEST_CASE("err test") {
-  res::Result<std::string> res = std::string("unknown error");
+  res::Result res = std::runtime_error("example");
   REQUIRE(res.is_err());
   REQUIRE_FALSE(res.is_ok());
 }
