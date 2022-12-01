@@ -1,6 +1,7 @@
 #pragma once
 
 #include "internal/ok.hpp"
+#include <exception>
 #include <optional>
 #include <string>
 
@@ -17,5 +18,10 @@ class Result {
 
   bool is_ok() const { return !error.has_value(); }
   bool is_err() const { return error.has_value(); }
+
+  std::string unwrap_err() const {
+    if (is_ok()) throw std::runtime_error("is ok");
+    return error.value();
+  }
 };
 }
