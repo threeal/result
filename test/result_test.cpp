@@ -1,5 +1,5 @@
-#include <gtest/gtest.h>
+#include <catch2/catch_test_macros.hpp>
 
-TEST(ResultTest, Dummy) {
-  EXPECT_TRUE(true);
+TEST_CASE("example test") {
+  REQUIRE(true);
 }
