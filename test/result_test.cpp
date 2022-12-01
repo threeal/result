@@ -14,7 +14,7 @@ TEST_CASE("check error result") {
 }
 
 TEST_CASE("call `unwrap_err` on error result") {
-  const std::string err_msg = "unknown error";
+  const res::internal::ErrMsg err_msg = "unknown error";
   res::Result res = err_msg;
   REQUIRE(res.is_err());
   REQUIRE(res.unwrap_err() == err_msg);
