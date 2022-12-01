@@ -9,7 +9,7 @@ TEST_CASE("ok test") {
 }
 
 TEST_CASE("err test") {
-  res::Result res = std::runtime_error("example");
+  res::Result res = "unknown error";
   REQUIRE(res.is_err());
   REQUIRE_FALSE(res.is_ok());
 }
