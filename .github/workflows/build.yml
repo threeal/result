@@ -12,8 +12,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install build dependencies
+        run: brew install ninja
+
       - name: Configure CMake
-        run: cmake -B build
+        run: cmake . -G Ninja -B build
 
       - name: Build targets
         run: cmake --build build
@@ -26,8 +29,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install build dependencies
+        run: brew install ninja
+
       - name: Configure CMake
-        run: cmake -B build -D BUILD_TESTING=ON .
+        run: cmake . -B build -G Ninja -D BUILD_TESTING=ON
 
       - name: Build targets
         run: cmake --build build
