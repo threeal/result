@@ -31,6 +31,20 @@ TEST_CASE("call `unwrap_err` on ok result") {
   REQUIRE_THROWS(res.unwrap_err());
 }
 
+TEST_CASE("check rewriting result") {
+  res::Result res = res::ok;
+  REQUIRE(res.is_ok());
+  res::internal::ErrMsg err_msg = "unknown error";
+  res = err_msg;
+  REQUIRE(res.is_err());
+  REQUIRE(res.unwrap_err() == err_msg);
+  res = err_msg = "other error";
+  REQUIRE(res.is_err());
+  REQUIRE(res.unwrap_err() == err_msg);
+  res = res::ok;
+  REQUIRE(res.is_ok());
+}
+
 namespace {
 res::Result foo(bool is_ok) {
   if (is_ok) return res::ok;
