@@ -13,6 +13,11 @@ TEST_CASE("check error result") {
   REQUIRE_FALSE(res.is_ok());
 }
 
+TEST_CASE("uninitialized result contains error") {
+  const res::Result res;
+  REQUIRE(res.is_err());
+}
+
 TEST_CASE("call `unwrap_err` on error result") {
   const res::internal::ErrMsg err_msg = "unknown error";
   const res::Result res = err_msg;
