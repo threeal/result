@@ -25,3 +25,20 @@ TEST_CASE("call `unwrap_err` on ok result") {
   REQUIRE(res.is_ok());
   REQUIRE_THROWS(res.unwrap_err());
 }
+
+namespace {
+res::Result foo(bool is_ok) {
+  if (is_ok) return res::ok;
+  return "unknown error";
+}
+}
+
+TEST_CASE("get result from function returning ok") {
+  const auto res = foo(true);
+  REQUIRE(res.is_ok());
+}
+
+TEST_CASE("get result from function returning error") {
+  const auto res = foo(false);
+  REQUIRE(res.is_err());
+}
