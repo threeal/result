@@ -15,13 +15,13 @@ TEST_CASE("check error result") {
 
 TEST_CASE("call `unwrap_err` on error result") {
   const res::internal::ErrMsg err_msg = "unknown error";
-  res::Result res = err_msg;
+  const res::Result res = err_msg;
   REQUIRE(res.is_err());
   REQUIRE(res.unwrap_err() == err_msg);
 }
 
 TEST_CASE("call `unwrap_err` on ok result") {
-  res::Result res = res::ok;
+  const res::Result res = res::ok;
   REQUIRE(res.is_ok());
   REQUIRE_THROWS(res.unwrap_err());
 }
@@ -40,5 +40,23 @@ TEST_CASE("get result from function returning ok") {
 
 TEST_CASE("get result from function returning error") {
   const auto res = foo(false);
+  REQUIRE(res.is_err());
+}
+
+TEST_CASE("check if ok result is preserved outside the scope") {
+  res::Result res;
+  {
+    res = foo(true);
+    REQUIRE(res.is_ok());
+  }
+  REQUIRE(res.is_ok());
+}
+
+TEST_CASE("check if error result is preserved outside the scope") {
+  res::Result res;
+  {
+    res = foo(false);
+    REQUIRE(res.is_err());
+  }
   REQUIRE(res.is_err());
 }

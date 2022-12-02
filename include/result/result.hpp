@@ -11,6 +11,7 @@ class Result {
  private:
   internal::ErrMsgPtr err_msg_ptr;
  public:
+  Result() {}
   Result(const internal::Ok& ok) {}
   Result(const internal::ErrMsgPtr& err_msg_ptr) : err_msg_ptr(err_msg_ptr) {}
 
