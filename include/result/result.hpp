@@ -24,6 +24,6 @@ class Result {
   internal::ErrMsg unwrap_err() const {
     if (!err_msg_ptr) throw std::runtime_error("is ok");
     return *err_msg_ptr;
-  }
+  }  // LCOV_EXCL_LINE
 };
 }
