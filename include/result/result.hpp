@@ -3,27 +3,25 @@
 #include "internal/err_msg.hpp"
 #include "internal/ok.hpp"
 #include <exception>
-#include <memory>
+#include <optional>
 
 namespace res {
 
 class Result {
  private:
-  internal::ErrMsgPtr err_msg_ptr;
+  std::optional<internal::ErrMsg> err_msg_opt;
  public:
-  Result() : err_msg_ptr(internal::uninitialized_err_msg_ptr) {}
+  Result() : err_msg_opt(internal::uninitialized_err_msg) {}
   Result(const internal::Ok& ok) {}
-  Result(const internal::ErrMsgPtr& err_msg_ptr) : err_msg_ptr(err_msg_ptr) {}
+  Result(const internal::ErrMsg& err_msg) : err_msg_opt(err_msg) {}
+  Result(const char* err_msg) : err_msg_opt(err_msg) {}
 
-  template<typename E>
-  Result(const E& err_msg) : err_msg_ptr(std::make_shared<internal::ErrMsg>(err_msg)) {}
-
-  bool is_ok() const { return !err_msg_ptr; }
-  bool is_err() const { return (bool)err_msg_ptr; }
+  bool is_ok() const { return !err_msg_opt.has_value(); }
+  bool is_err() const { return err_msg_opt.has_value(); }
 
   internal::ErrMsg unwrap_err() const {
-    if (!err_msg_ptr) throw std::runtime_error("is ok");
-    return *err_msg_ptr;
+    if (!err_msg_opt.has_value()) throw std::runtime_error("is ok");
+    return err_msg_opt.value();
   }  // LCOV_EXCL_LINE
 };
 }
