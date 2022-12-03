@@ -1,5 +1,6 @@
 #include <result/result.hpp>
 #include <catch2/catch_test_macros.hpp>
+#include <string>
 
 TEST_CASE("check ok result") {
   const res::Result res = res::ok;
@@ -8,7 +9,7 @@ TEST_CASE("check ok result") {
 }
 
 TEST_CASE("check error result") {
-  const res::Result res = "unknown error";
+  const res::Result res = res::err("unknown error");
   REQUIRE(res.is_err());
   REQUIRE_FALSE(res.is_ok());
 }
@@ -19,8 +20,8 @@ TEST_CASE("uninitialized result contains error") {
 }
 
 TEST_CASE("call `unwrap_err` on error result") {
-  const res::internal::ErrMsg err_msg = "unknown error";
-  const res::Result res = err_msg;
+  const std::string err_msg = "unknown error";
+  const res::Result res = res::err(err_msg);
   REQUIRE(res.is_err());
   REQUIRE(res.unwrap_err() == err_msg);
 }
@@ -34,11 +35,12 @@ TEST_CASE("call `unwrap_err` on ok result") {
 TEST_CASE("check rewriting result") {
   res::Result res = res::ok;
   REQUIRE(res.is_ok());
-  res::internal::ErrMsg err_msg = "unknown error";
-  res = err_msg;
+  std::string err_msg = "unknown error";
+  res = res::err(err_msg);
   REQUIRE(res.is_err());
   REQUIRE(res.unwrap_err() == err_msg);
-  res = err_msg = "other error";
+  err_msg = "other error";
+  res = res::err(err_msg);
   REQUIRE(res.is_err());
   REQUIRE(res.unwrap_err() == err_msg);
   res = res::ok;
@@ -48,7 +50,7 @@ TEST_CASE("check rewriting result") {
 namespace {
 res::Result foo(bool is_ok) {
   if (is_ok) return res::ok;
-  return "unknown error";
+  return res::err("unknown error");
 }
 }
 
