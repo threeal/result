@@ -67,17 +67,20 @@ TEST_CASE("get result from function returning error") {
 TEST_CASE("check if ok result is preserved outside the scope") {
   res::Result res;
   {
-    res = foo(true);
+    res = res::Ok();
     REQUIRE(res.is_ok());
   }
   REQUIRE(res.is_ok());
 }
 
 TEST_CASE("check if error result is preserved outside the scope") {
+  const std::string err_msg = "unknown error";
   res::Result res;
   {
-    res = foo(false);
+    res = res::Err(err_msg);
     REQUIRE(res.is_err());
+    REQUIRE(res.unwrap_err() == err_msg);
   }
   REQUIRE(res.is_err());
+  REQUIRE(res.unwrap_err() == err_msg);
 }

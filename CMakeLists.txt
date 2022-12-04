@@ -14,7 +14,7 @@ if(BUILD_TESTING)
 
   find_package(Catch2 REQUIRED)
 
-  add_executable(result_test test/result_test.cpp)
+  add_executable(result_test test/result_test.cpp test/result_or_test.cpp)
   target_link_libraries(result_test PRIVATE result Catch2::Catch2WithMain)
   catch_discover_tests(result_test)
 endif()
