@@ -11,7 +11,7 @@ class Result {
  private:
   std::optional<Err> err_opt;
  public:
-  Result() : err_opt(Err("result is uninitialized")) {}
+  Result() : Result(Err("result is uninitialized")) {}
   Result(const Ok& ok) {}
   Result(const Err& err) : err_opt(err) {}
 
