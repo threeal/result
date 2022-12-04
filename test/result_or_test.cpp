@@ -42,3 +42,23 @@ TEST_CASE("call `unwrap_err` on ok result-or") {
   REQUIRE(res.is_ok());
   REQUIRE_THROWS(res.unwrap_err());
 }
+
+TEST_CASE("check rewriting result-or") {
+  res::ResultOr<int> res = 32;
+  REQUIRE(res.is_ok());
+  REQUIRE(res.unwrap() == 32);
+  std::string err_msg = "unknown error";
+  res = res::Err(err_msg);
+  REQUIRE(res.is_err());
+  REQUIRE(res.unwrap_err() == err_msg);
+  err_msg = "other error";
+  res = res::Err(err_msg);
+  REQUIRE(res.is_err());
+  REQUIRE(res.unwrap_err() == err_msg);
+  res = 32;
+  REQUIRE(res.is_ok());
+  REQUIRE(res.unwrap() == 32);
+  res = 16;
+  REQUIRE(res.is_ok());
+  REQUIRE(res.unwrap() == 16);
+}
