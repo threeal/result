@@ -17,5 +17,10 @@ class ResultOr {
 
   bool is_ok() const { return !data_is_err; }
   bool is_err() const { return data_is_err; }
+
+  const Err& unwrap_err() const {
+    if (!data_is_err) throw std::runtime_error("unable to unwrap error of ok result-or");
+    return std::get<Err>(data);
+  }
 };
 }
