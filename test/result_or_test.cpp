@@ -62,3 +62,20 @@ TEST_CASE("check rewriting result-or") {
   REQUIRE(res.is_ok());
   REQUIRE(res.unwrap() == 16);
 }
+
+namespace {
+res::ResultOr<int> foo(bool is_ok) {
+  if (is_ok) return 32;
+  return res::Err("unknown error");
+}
+}
+
+TEST_CASE("get result-or from function returning ok") {
+  const auto res = foo(true);
+  REQUIRE(res.is_ok());
+}
+
+TEST_CASE("get result-or from function returning error") {
+  const auto res = foo(false);
+  REQUIRE(res.is_err());
+}
