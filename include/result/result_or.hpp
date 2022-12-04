@@ -22,6 +22,6 @@ class ResultOr {
     if (!data_is_err)
       throw std::runtime_error("unable to unwrap error of ok result-or");
     return std::get<Err>(data);
-  }
+  }  // LCOV_EXCL_LINE
 };
 }
