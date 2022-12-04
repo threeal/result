@@ -79,3 +79,25 @@ TEST_CASE("get result-or from function returning error") {
   const auto res = foo(false);
   REQUIRE(res.is_err());
 }
+
+TEST_CASE("check if ok result-or is preserved outside the scope") {
+  res::ResultOr<int> res;
+  {
+    res = 32;
+    REQUIRE(res.is_ok());
+    REQUIRE(res.unwrap() == 32);
+  }
+  REQUIRE(res.is_ok());
+  REQUIRE(res.unwrap() == 32);
+}
+
+TEST_CASE("check if error result-or is preserved outside the scope") {
+  res::ResultOr<int> res;
+  {
+    res = res::Err("unknown error");
+    REQUIRE(res.is_err());
+    REQUIRE(res.unwrap_err() == std::string("unknown error"));
+  }
+  REQUIRE(res.is_err());
+  REQUIRE(res.unwrap_err() == std::string("unknown error"));
+}
