@@ -23,12 +23,12 @@ class ResultOr {
     if (data_is_err)
       throw std::runtime_error("unable to unwrap content of error result-or");
     return std::get<T>(data);
-  }  // LCOV_EXCL_LINE
+  }
 
   const Err& unwrap_err() const {
     if (!data_is_err)
       throw std::runtime_error("unable to unwrap error of ok result-or");
     return std::get<Err>(data);
-  }  // LCOV_EXCL_LINE
+  }
 };
 }
