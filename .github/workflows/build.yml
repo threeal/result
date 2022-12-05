@@ -56,5 +56,5 @@ jobs:
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         run: |
-          gcovr -r .. --exclude-directories _deps --coveralls coverage.json
+          gcovr -r .. --exclude-directories _deps -e _deps --coveralls coverage.json
           curl -v -F json_file=@coverage.json https://coveralls.io/api/v1/jobs
