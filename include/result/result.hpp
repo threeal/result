@@ -2,8 +2,8 @@
 
 #include "err.hpp"
 #include "ok.hpp"
-#include <exception>
 #include <optional>
+#include <stdexcept>
 
 namespace res {
 
@@ -22,6 +22,6 @@ class Result {
     if (!err_opt.has_value())
       throw std::runtime_error("unable to unwrap error of ok result");
     return err_opt.value();
-  }  // LCOV_EXCL_LINE
+  }
 };
 }
