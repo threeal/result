@@ -2,8 +2,8 @@
 
 #include "err.hpp"
 #include "ok.hpp"
-#include <exception>
 #include <optional>
+#include <stdexcept>
 
 namespace res {
 

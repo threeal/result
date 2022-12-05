@@ -1,6 +1,7 @@
 #pragma once
 
 #include "err.hpp"
+#include <stdexcept>
 #include <variant>
 
 namespace res {
