@@ -5,7 +5,7 @@ on:
     branches: ['**']
 jobs:
   release:
-    runs-on: macos-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout this repository
         uses: actions/checkout@v2.5.0
@@ -13,7 +13,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install build dependencies
-        run: brew install ninja
+        run: sudo apt install ninja-build
 
       - name: Configure CMake
         run: cmake . -G Ninja -B build
@@ -22,7 +22,7 @@ jobs:
         run: cmake --build build
 
   test:
-    runs-on: macos-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout this repository
         uses: actions/checkout@v2.5.0
@@ -31,7 +31,7 @@ jobs:
 
       - name: Install build dependencies
         run: |
-          brew install ninja
+          sudo apt install ninja-build
           pip3 install gcovr
 
       - name: Configure CMake
@@ -45,7 +45,7 @@ jobs:
 
       - name: Send test result to Testspace
         run: |
-          curl -fsSL https://testspace-client.s3.amazonaws.com/testspace-darwin.tgz | tar -zxvf- -C build
+          curl -fsSL https://testspace-client.s3.amazonaws.com/testspace-linux.tgz | tar -zxvf- -C build
           build/testspace config url ${{ secrets.TESTSPACE_URL }}
           build/testspace config project ${{ secrets.TESTSPACE_PROJECT }}
           build/testspace config space ${{ github.ref_name }}
