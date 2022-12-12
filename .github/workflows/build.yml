@@ -12,7 +12,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install build dependencies
+      - name: Install Ninja
         run: sudo apt install ninja-build
 
       - name: Configure CMake
@@ -29,10 +29,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install build dependencies
-        run: |
-          sudo apt install ninja-build
-          pip3 install gcovr
+      - name: Install Ninja
+        run: sudo apt install ninja-build
 
       - name: Configure CMake
         run: cmake . -B build -G Ninja -D BUILD_TESTING=ON
@@ -46,18 +44,29 @@ jobs:
       - name: Run tests
         run: ctest --verbose --test-dir build --no-compress-output -T Test || true
 
-      - name: Send test result to Testspace
-        run: |
-          curl -fsSL https://testspace-client.s3.amazonaws.com/testspace-linux.tgz | tar -zxvf- -C build
-          build/testspace config url ${{ secrets.TESTSPACE_URL }}
-          build/testspace config project ${{ secrets.TESTSPACE_PROJECT }}
-          build/testspace config space ${{ github.ref_name }}
-          build/testspace [Tests]"build/Testing/*/Test.xml"
+      - name: Download Testspace client
+        run: curl -fsSL https://testspace-client.s3.amazonaws.com/testspace-linux.tgz | tar -zxvf- -C build
 
-      - name: Generate code coverage info and send to Coveralls
+      - name: Configure Testspace client
+        working-directory: build
+        run: |
+          ./testspace config url ${{ secrets.TESTSPACE_URL }}
+          ./testspace config project ${{ secrets.TESTSPACE_PROJECT }}
+          ./testspace config space ${{ github.ref_name }}
+
+      - name: Send test result to Testspace
+        working-directory: build
+        run: ./testspace [Tests]"Testing/*/Test.xml"
+
+      - name: Install gcovr
+        run: pip3 install gcovr
+
+      - name: Generate code coverage info
         working-directory: build
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-        run: |
-          gcovr -r .. --exclude-directories _deps -e _deps --coveralls coverage.json
-          curl -v -F json_file=@coverage.json https://coveralls.io/api/v1/jobs
+        run: gcovr -r .. --exclude-directories _deps -e _deps --coveralls coverage.json
+
+      - name: Send code coverage info to Coveralls
+        working-directory: build
+        run: curl -v -F json_file=@coverage.json https://coveralls.io/api/v1/jobs
