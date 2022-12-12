@@ -1,16 +1,18 @@
 #pragma once
 
-#include "err.hpp"
 #include <stdexcept>
 #include <variant>
 
+#include "err.hpp"
+
 namespace res {
 
-template<typename T>
+template <typename T>
 class ResultOr {
  private:
   std::variant<T, Err> data;
   bool data_is_err;
+
  public:
   ResultOr() : ResultOr(Err("result-or is uninitialized")) {}
   ResultOr(const T& data) : data(data), data_is_err(false) {}
@@ -31,4 +33,4 @@ class ResultOr {
     return std::get<Err>(data);
   }
 };
-}
+}  // namespace res

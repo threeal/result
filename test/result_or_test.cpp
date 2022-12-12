@@ -1,5 +1,5 @@
-#include <result/result_or.hpp>
 #include <catch2/catch_test_macros.hpp>
+#include <result/result_or.hpp>
 
 TEST_CASE("check ok result-or") {
   const res::ResultOr<int> res = 32;
@@ -68,7 +68,7 @@ res::ResultOr<int> foo(bool is_ok) {
   if (is_ok) return 32;
   return res::Err("unknown error");
 }
-}
+}  // namespace
 
 TEST_CASE("get result-or from function returning ok") {
   const auto res = foo(true);

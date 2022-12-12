@@ -1,15 +1,17 @@
 #pragma once
 
-#include "err.hpp"
-#include "ok.hpp"
 #include <optional>
 #include <stdexcept>
+
+#include "err.hpp"
+#include "ok.hpp"
 
 namespace res {
 
 class Result {
  private:
   std::optional<Err> err_opt;
+
  public:
   Result() : Result(Err("result is uninitialized")) {}
   Result(const Ok& ok) {}
@@ -24,4 +26,4 @@ class Result {
     return err_opt.value();
   }
 };
-}
+}  // namespace res
