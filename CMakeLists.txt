@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 project(result)
 
+include(Format)
+
 add_library(result INTERFACE)
 target_include_directories(result INTERFACE include)
 
