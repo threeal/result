@@ -32,8 +32,14 @@ jobs:
       - name: Install Ninja
         run: sudo apt install ninja-build
 
+      - name: Install cmake-format
+        run: pip3 install cmake-format
+
       - name: Configure CMake
         run: cmake . -B build -G Ninja -D BUILD_TESTING=ON
+
+      - name: Check code formatting
+        run: cmake --build build --target check-format
 
       - name: Build targets
         run: cmake --build build

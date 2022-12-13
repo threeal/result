@@ -1,5 +1,5 @@
-#include <result/result.hpp>
 #include <catch2/catch_test_macros.hpp>
+#include <result/result.hpp>
 #include <string>
 
 TEST_CASE("check ok result") {
@@ -52,7 +52,7 @@ res::Result foo(bool is_ok) {
   if (is_ok) return res::Ok();
   return res::Err("unknown error");
 }
-}
+}  // namespace
 
 TEST_CASE("get result from function returning ok") {
   const auto res = foo(true);
