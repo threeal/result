@@ -12,11 +12,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install Ninja
-        run: sudo apt install ninja-build
+      - name: Install LLVM and Ninja
+        run: sudo apt install llvm ninja-build
 
       - name: Configure CMake
-        run: cmake . -G Ninja -B build
+        run: cmake . -B build -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -G Ninja
 
       - name: Build targets
         run: cmake --build build
@@ -29,14 +29,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install Ninja
-        run: sudo apt install ninja-build
+      - name: Install LLVM and Ninja
+        run: sudo apt install llvm ninja-build
 
       - name: Install cmake-format
         run: pip3 install cmake-format
 
       - name: Configure CMake
-        run: cmake . -B build -G Ninja -D BUILD_TESTING=ON
+        run: cmake . -B build -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -G Ninja -DBUILD_TESTING=ON
 
       - name: Check code formatting
         run: cmake --build build --target check-format
@@ -68,7 +68,7 @@ jobs:
         working-directory: build
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-        run: gcovr -r .. --exclude-directories _deps -e _deps --coveralls coverage.json
+        run: gcovr -r .. --gcov-executable 'llvm-cov gcov' --exclude-directories _deps -e _deps --coveralls coverage.json
 
       - name: Send code coverage info to Coveralls
         working-directory: build
