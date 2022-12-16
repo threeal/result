@@ -1,6 +1,6 @@
 # Result
 
-[![build status](https://img.shields.io/github/workflow/status/threeal/result/build)](https://github.com/threeal/result/actions/workflows/build.yml)
+[![build status](https://img.shields.io/github/actions/workflow/status/threeal/result/build.yml?branch=main)](https://github.com/threeal/result/actions/workflows/build.yml)
 [![test result](https://img.shields.io/testspace/pass-ratio/threeal/threeal:result/main)](https://threeal.testspace.com/projects/threeal:result)
 [![code coverage](https://img.shields.io/coveralls/github/threeal/result/main)](https://coveralls.io/github/threeal/result)
 
