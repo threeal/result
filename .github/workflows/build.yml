@@ -36,7 +36,7 @@ jobs:
         run: pip3 install cmake-format
 
       - name: Configure CMake
-        run: cmake . -B build -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -G Ninja -DBUILD_TESTING=ON
+        run: cmake . -B build -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -G Ninja -DBUILD_TESTING=ON -DCMAKE_CXX_FLAGS='-Werror'
 
       - name: Check code formatting
         run: cmake --build build --target check-format
