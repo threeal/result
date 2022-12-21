@@ -14,7 +14,7 @@ class Result {
 
  public:
   Result() : Result(Err("result is uninitialized")) {}
-  Result(const Ok& ok) {}
+  Result(const Ok&) {}
   Result(const Err& err) : err_opt(err) {}
 
   bool is_ok() const { return !err_opt.has_value(); }
