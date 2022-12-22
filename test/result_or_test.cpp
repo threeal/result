@@ -111,3 +111,15 @@ TEST_CASE("cast result-or into result") {
   REQUIRE(res.is_ok());
   REQUIRE(int_res.is_ok());
 }
+
+TEST_CASE("cast result-or into other result-or with different type") {
+  res::ResultOr<int> i_res;
+  res::ResultOr<float> f_res = i_res;
+  REQUIRE(f_res.is_err());
+  REQUIRE(i_res.is_err());
+  i_res = 32;
+  f_res = i_res;
+  REQUIRE(i_res.is_ok());
+  REQUIRE(f_res.is_ok());
+  REQUIRE(i_res.unwrap() == f_res.unwrap());
+}
