@@ -124,7 +124,7 @@ TEST_CASE("cast result-or into other result-or with different type") {
   res::ResultOr<int> res = static_cast<res::ResultOr<int>>(src);
   REQUIRE(src.is_err());
   REQUIRE(res.is_err());
-  src = Int{.data = 32};
+  src = Int{32};
   res = static_cast<res::ResultOr<int>>(src);
   REQUIRE(src.is_ok());
   REQUIRE(res.is_ok());
