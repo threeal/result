@@ -101,3 +101,45 @@ TEST_CASE("check if error result-or is preserved outside the scope") {
   REQUIRE(res.is_err());
   REQUIRE(res.unwrap_err() == std::string("unknown error"));
 }
+
+TEST_CASE("cast result-or into result") {
+  res::ResultOr<int> src;
+  SECTION("from ok result-or") {
+    res::Result res = src = 32;
+    CHECK(res.is_ok());
+  }
+  SECTION("from error result-or") {
+    res::Result res = src = res::Err("unknown error");
+    CHECK(res.is_err());
+    if (res.is_err()) CHECK(res.unwrap_err() == src.unwrap_err());
+  }
+}
+
+namespace {
+struct Int {
+  int data;
+  explicit operator int() const { return data; }
+};
+}  // namespace
+
+TEST_CASE("cast result-or into other result-or with different type") {
+  res::ResultOr<int> res;
+  SECTION("from ok result-or") {
+    res::ResultOr<Int> src = Int{32};
+    SECTION("using `as()` function") { res = src.as<int>(); }
+    SECTION("using explicit cast") {
+      res = static_cast<res::ResultOr<int>>(src);
+    }
+    CHECK(res.is_ok());
+    if (res.is_ok()) CHECK(res.unwrap() == src.unwrap().data);
+  }
+  SECTION("from error result-or") {
+    res::ResultOr<Int> src = res::Err("unknown error");
+    SECTION("using `as()` function") { res = src.as<int>(); }
+    SECTION("using explicit cast") {
+      res = static_cast<res::ResultOr<int>>(src);
+    }
+    CHECK(res.is_err());
+    if (res.is_err()) CHECK(res.unwrap_err() == src.unwrap_err());
+  }
+}
