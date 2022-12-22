@@ -112,14 +112,21 @@ TEST_CASE("cast result-or into result") {
   REQUIRE(int_res.is_ok());
 }
 
+namespace {
+struct Int {
+  int data;
+  explicit operator int() const { return data; }
+};
+}  // namespace
+
 TEST_CASE("cast result-or into other result-or with different type") {
-  res::ResultOr<int> i_res;
-  res::ResultOr<float> f_res = i_res;
-  REQUIRE(f_res.is_err());
-  REQUIRE(i_res.is_err());
-  i_res = 32;
-  f_res = i_res;
-  REQUIRE(i_res.is_ok());
-  REQUIRE(f_res.is_ok());
-  REQUIRE(i_res.unwrap() == f_res.unwrap());
+  res::ResultOr<Int> src;
+  res::ResultOr<int> res = static_cast<res::ResultOr<int>>(src);
+  REQUIRE(src.is_err());
+  REQUIRE(res.is_err());
+  src = Int{.data = 32};
+  res = static_cast<res::ResultOr<int>>(src);
+  REQUIRE(src.is_ok());
+  REQUIRE(res.is_ok());
+  REQUIRE(res.unwrap() == src.unwrap().data);
 }

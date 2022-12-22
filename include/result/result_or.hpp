@@ -20,9 +20,9 @@ class ResultOr {
   ResultOr(const Err& err) : data(err), data_is_err(true) {}
 
   template <typename U>
-  operator ResultOr<U>() const {
+  explicit operator ResultOr<U>() const {
     if (data_is_err) return std::get<Err>(data);
-    return std::get<T>(data);
+    return static_cast<U>(std::get<T>(data));
   }
 
   operator Result() const {
