@@ -103,13 +103,16 @@ TEST_CASE("check if error result-or is preserved outside the scope") {
 }
 
 TEST_CASE("cast result-or into result") {
-  res::ResultOr<int> int_res;
-  res::Result res = int_res;
-  REQUIRE(res.is_err());
-  REQUIRE(int_res.is_err());
-  res = int_res = 32;
-  REQUIRE(res.is_ok());
-  REQUIRE(int_res.is_ok());
+  res::ResultOr<int> src;
+  SECTION("from ok result-or") {
+    res::Result res = src = 32;
+    CHECK(res.is_ok());
+  }
+  SECTION("from error result-or") {
+    res::Result res = src = res::Err("unknown error");
+    CHECK(res.is_err());
+    if (res.is_err()) CHECK(res.unwrap_err() == src.unwrap_err());
+  }
 }
 
 namespace {
@@ -120,10 +123,9 @@ struct Int {
 }  // namespace
 
 TEST_CASE("cast result-or into other result-or with different type") {
-  res::ResultOr<Int> src;
   res::ResultOr<int> res;
   SECTION("from ok result-or") {
-    src = Int{32};
+    res::ResultOr<Int> src = Int{32};
     SECTION("using `as()` function") { res = src.as<int>(); }
     SECTION("using explicit cast") {
       res = static_cast<res::ResultOr<int>>(src);
@@ -132,7 +134,7 @@ TEST_CASE("cast result-or into other result-or with different type") {
     if (res.is_ok()) CHECK(res.unwrap() == src.unwrap().data);
   }
   SECTION("from error result-or") {
-    src = res::Err("unknown error");
+    res::ResultOr<Int> src = res::Err("unknown error");
     SECTION("using `as()` function") { res = src.as<int>(); }
     SECTION("using explicit cast") {
       res = static_cast<res::ResultOr<int>>(src);
