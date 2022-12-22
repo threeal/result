@@ -121,29 +121,23 @@ struct Int {
 
 TEST_CASE("cast result-or into other result-or with different type") {
   res::ResultOr<Int> src;
-  res::ResultOr<int> res = static_cast<res::ResultOr<int>>(src);
-  REQUIRE(src.is_err());
-  REQUIRE(res.is_err());
-  src = Int{32};
-  res = static_cast<res::ResultOr<int>>(src);
-  REQUIRE(src.is_ok());
-  REQUIRE(res.is_ok());
-  REQUIRE(res.unwrap() == src.unwrap().data);
-}
-
-TEST_CASE("cast result-or into other result-or using `as()` function") {
-  res::ResultOr<Int> src;
   res::ResultOr<int> res;
-  SECTION("from error result-or") {
-    src = res::Err("unknown error");
-    res = src.as<int>();
-    REQUIRE(res.is_err());
-    REQUIRE(res.unwrap_err() == src.unwrap_err());
-  }
   SECTION("from ok result-or") {
     src = Int{32};
-    res = src.as<int>();
-    REQUIRE(res.is_ok());
-    REQUIRE(res.unwrap() == src.unwrap().data);
+    SECTION("using `as()` function") { res = src.as<int>(); }
+    SECTION("using explicit cast") {
+      res = static_cast<res::ResultOr<int>>(src);
+    }
+    CHECK(res.is_ok());
+    if (res.is_ok()) CHECK(res.unwrap() == src.unwrap().data);
+  }
+  SECTION("from error result-or") {
+    src = res::Err("unknown error");
+    SECTION("using `as()` function") { res = src.as<int>(); }
+    SECTION("using explicit cast") {
+      res = static_cast<res::ResultOr<int>>(src);
+    }
+    CHECK(res.is_err());
+    if (res.is_err()) CHECK(res.unwrap_err() == src.unwrap_err());
   }
 }
