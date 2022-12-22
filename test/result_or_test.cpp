@@ -130,3 +130,20 @@ TEST_CASE("cast result-or into other result-or with different type") {
   REQUIRE(res.is_ok());
   REQUIRE(res.unwrap() == src.unwrap().data);
 }
+
+TEST_CASE("cast result-or into other result-or using `as()` function") {
+  res::ResultOr<Int> src;
+  res::ResultOr<int> res;
+  SECTION("from error result-or") {
+    src = res::Err("unknown error");
+    res = src.as<int>();
+    REQUIRE(res.is_err());
+    REQUIRE(res.unwrap_err() == src.unwrap_err());
+  }
+  SECTION("from ok result-or") {
+    src = Int{32};
+    res = src.as<int>();
+    REQUIRE(res.is_ok());
+    REQUIRE(res.unwrap() == src.unwrap().data);
+  }
+}

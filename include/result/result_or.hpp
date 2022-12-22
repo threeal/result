@@ -30,6 +30,12 @@ class ResultOr {
     return Ok();
   }
 
+  template <typename U>
+  ResultOr<U> as() const {
+    if (data_is_err) return std::get<Err>(data);
+    return static_cast<U>(std::get<T>(data));
+  }
+
   bool is_ok() const { return !data_is_err; }
   bool is_err() const { return data_is_err; }
 
