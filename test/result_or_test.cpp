@@ -101,3 +101,13 @@ TEST_CASE("check if error result-or is preserved outside the scope") {
   REQUIRE(res.is_err());
   REQUIRE(res.unwrap_err() == std::string("unknown error"));
 }
+
+TEST_CASE("cast result-or into result") {
+  res::ResultOr<int> int_res;
+  res::Result res = int_res;
+  REQUIRE(res.is_err());
+  REQUIRE(int_res.is_err());
+  res = int_res = 32;
+  REQUIRE(res.is_ok());
+  REQUIRE(int_res.is_ok());
+}

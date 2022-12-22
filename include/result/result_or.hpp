@@ -4,6 +4,7 @@
 #include <variant>
 
 #include "err.hpp"
+#include "result.hpp"
 
 namespace res {
 
@@ -17,6 +18,11 @@ class ResultOr {
   ResultOr() : ResultOr(Err("result-or is uninitialized")) {}
   ResultOr(const T& data) : data(data), data_is_err(false) {}
   ResultOr(const Err& err) : data(err), data_is_err(true) {}
+
+  operator Result() const {
+    if (data_is_err) return std::get<Err>(data);
+    return Ok();
+  }
 
   bool is_ok() const { return !data_is_err; }
   bool is_err() const { return data_is_err; }
