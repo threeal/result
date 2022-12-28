@@ -9,18 +9,18 @@
 namespace res {
 
 template <typename T>
-class ResultOr {
+class ResultOf {
  private:
   std::variant<T, Err> data;
   bool data_is_err;
 
  public:
-  ResultOr() : ResultOr(Err("result-or is uninitialized")) {}
-  ResultOr(const T& data) : data(data), data_is_err(false) {}
-  ResultOr(const Err& err) : data(err), data_is_err(true) {}
+  ResultOf() : ResultOf(Err("result-of is uninitialized")) {}
+  ResultOf(const T& data) : data(data), data_is_err(false) {}
+  ResultOf(const Err& err) : data(err), data_is_err(true) {}
 
   template <typename U>
-  explicit operator ResultOr<U>() const {
+  explicit operator ResultOf<U>() const {
     if (data_is_err) return std::get<Err>(data);
     return static_cast<U>(std::get<T>(data));
   }
@@ -31,7 +31,7 @@ class ResultOr {
   }
 
   template <typename U>
-  ResultOr<U> as() const {
+  ResultOf<U> as() const {
     if (data_is_err) return std::get<Err>(data);
     return static_cast<U>(std::get<T>(data));
   }
@@ -41,13 +41,13 @@ class ResultOr {
 
   const T& unwrap() const {
     if (data_is_err)
-      throw std::runtime_error("unable to unwrap content of error result-or");
+      throw std::runtime_error("unable to unwrap content of error result-of");
     return std::get<T>(data);
   }
 
   const Err& unwrap_err() const {
     if (!data_is_err)
-      throw std::runtime_error("unable to unwrap error of ok result-or");
+      throw std::runtime_error("unable to unwrap error of ok result-of");
     return std::get<Err>(data);
   }
 };

@@ -1,50 +1,50 @@
 #include <catch2/catch_test_macros.hpp>
-#include <result/result_or.hpp>
+#include <result/result_of.hpp>
 
-TEST_CASE("check ok result-or") {
-  const res::ResultOr<int> res = 32;
+TEST_CASE("check ok result-of") {
+  const res::ResultOf<int> res = 32;
   REQUIRE(res.is_ok());
   REQUIRE_FALSE(res.is_err());
 }
 
-TEST_CASE("check error result-or") {
-  const res::ResultOr<int> res = res::Err("unknown error");
+TEST_CASE("check error result-of") {
+  const res::ResultOf<int> res = res::Err("unknown error");
   REQUIRE(res.is_err());
   REQUIRE_FALSE(res.is_ok());
 }
 
-TEST_CASE("uninitialized result-or contains error") {
-  const res::ResultOr<int> res;
+TEST_CASE("uninitialized result-of contains error") {
+  const res::ResultOf<int> res;
   REQUIRE(res.is_err());
 }
 
-TEST_CASE("call `unwrap` on ok result-or") {
-  const res::ResultOr<int> res = 32;
+TEST_CASE("call `unwrap` on ok result-of") {
+  const res::ResultOf<int> res = 32;
   REQUIRE(res.is_ok());
   REQUIRE(res.unwrap() == 32);
 }
 
-TEST_CASE("call `unwrap` on error result-or") {
-  const res::ResultOr<int> res = res::Err("unknown error");
+TEST_CASE("call `unwrap` on error result-of") {
+  const res::ResultOf<int> res = res::Err("unknown error");
   REQUIRE(res.is_err());
   REQUIRE_THROWS(res.unwrap());
 }
 
-TEST_CASE("call `unwrap_err` on error result-or") {
+TEST_CASE("call `unwrap_err` on error result-of") {
   const std::string err_msg = "unknown error";
-  const res::ResultOr<int> res = res::Err(err_msg);
+  const res::ResultOf<int> res = res::Err(err_msg);
   REQUIRE(res.is_err());
   REQUIRE(res.unwrap_err() == err_msg);
 }
 
-TEST_CASE("call `unwrap_err` on ok result-or") {
-  const res::ResultOr<int> res = 32;
+TEST_CASE("call `unwrap_err` on ok result-of") {
+  const res::ResultOf<int> res = 32;
   REQUIRE(res.is_ok());
   REQUIRE_THROWS(res.unwrap_err());
 }
 
-TEST_CASE("check rewriting result-or") {
-  res::ResultOr<int> res = 32;
+TEST_CASE("check rewriting result-of") {
+  res::ResultOf<int> res = 32;
   REQUIRE(res.is_ok());
   REQUIRE(res.unwrap() == 32);
   std::string err_msg = "unknown error";
@@ -64,24 +64,24 @@ TEST_CASE("check rewriting result-or") {
 }
 
 namespace {
-res::ResultOr<int> foo(bool is_ok) {
+res::ResultOf<int> foo(bool is_ok) {
   if (is_ok) return 32;
   return res::Err("unknown error");
 }
 }  // namespace
 
-TEST_CASE("get result-or from function returning ok") {
+TEST_CASE("get result-of from function returning ok") {
   const auto res = foo(true);
   REQUIRE(res.is_ok());
 }
 
-TEST_CASE("get result-or from function returning error") {
+TEST_CASE("get result-of from function returning error") {
   const auto res = foo(false);
   REQUIRE(res.is_err());
 }
 
-TEST_CASE("check if ok result-or is preserved outside the scope") {
-  res::ResultOr<int> res;
+TEST_CASE("check if ok result-of is preserved outside the scope") {
+  res::ResultOf<int> res;
   {
     res = 32;
     REQUIRE(res.is_ok());
@@ -91,8 +91,8 @@ TEST_CASE("check if ok result-or is preserved outside the scope") {
   REQUIRE(res.unwrap() == 32);
 }
 
-TEST_CASE("check if error result-or is preserved outside the scope") {
-  res::ResultOr<int> res;
+TEST_CASE("check if error result-of is preserved outside the scope") {
+  res::ResultOf<int> res;
   {
     res = res::Err("unknown error");
     REQUIRE(res.is_err());
@@ -102,13 +102,13 @@ TEST_CASE("check if error result-or is preserved outside the scope") {
   REQUIRE(res.unwrap_err() == std::string("unknown error"));
 }
 
-TEST_CASE("cast result-or into result") {
-  res::ResultOr<int> src;
-  SECTION("from ok result-or") {
+TEST_CASE("cast result-of into result") {
+  res::ResultOf<int> src;
+  SECTION("from ok result-of") {
     res::Result res = src = 32;
     CHECK(res.is_ok());
   }
-  SECTION("from error result-or") {
+  SECTION("from error result-of") {
     res::Result res = src = res::Err("unknown error");
     CHECK(res.is_err());
     if (res.is_err()) CHECK(res.unwrap_err() == src.unwrap_err());
@@ -122,22 +122,22 @@ struct Int {
 };
 }  // namespace
 
-TEST_CASE("cast result-or into other result-or with different type") {
-  res::ResultOr<int> res;
-  SECTION("from ok result-or") {
-    res::ResultOr<Int> src = Int{32};
+TEST_CASE("cast result-of into other result-of with different type") {
+  res::ResultOf<int> res;
+  SECTION("from ok result-of") {
+    res::ResultOf<Int> src = Int{32};
     SECTION("using `as()` function") { res = src.as<int>(); }
     SECTION("using explicit cast") {
-      res = static_cast<res::ResultOr<int>>(src);
+      res = static_cast<res::ResultOf<int>>(src);
     }
     CHECK(res.is_ok());
     if (res.is_ok()) CHECK(res.unwrap() == src.unwrap().data);
   }
-  SECTION("from error result-or") {
-    res::ResultOr<Int> src = res::Err("unknown error");
+  SECTION("from error result-of") {
+    res::ResultOf<Int> src = res::Err("unknown error");
     SECTION("using `as()` function") { res = src.as<int>(); }
     SECTION("using explicit cast") {
-      res = static_cast<res::ResultOr<int>>(src);
+      res = static_cast<res::ResultOf<int>>(src);
     }
     CHECK(res.is_err());
     if (res.is_err()) CHECK(res.unwrap_err() == src.unwrap_err());
