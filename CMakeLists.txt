@@ -18,7 +18,7 @@ if(BUILD_TESTING)
   include("${Catch2_SOURCE_DIR}/extras/Catch.cmake")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -fPIC -O0")
 
-  add_executable(result_test test/result_test.cpp test/result_or_test.cpp)
+  add_executable(result_test test/result_test.cpp test/result_of_test.cpp)
   target_link_libraries(result_test PRIVATE result Catch2::Catch2WithMain)
   catch_discover_tests(result_test)
 endif()
