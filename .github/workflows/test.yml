@@ -41,14 +41,12 @@ jobs:
         run: pip3 install gcovr
 
       - name: Generate code coverage info
-        working-directory: build
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-        run: gcovr -r .. --gcov-executable 'llvm-cov gcov' --exclude-directories _deps -e _deps --coveralls coverage.json
+        run: gcovr --gcov-executable 'llvm-cov gcov' -e 'build/*' --coveralls build/coverage.json
 
       - name: Send code coverage info to Coveralls
-        working-directory: build
-        run: curl -v -F json_file=@coverage.json https://coveralls.io/api/v1/jobs
+        run: curl -v -F json_file=@build/coverage.json https://coveralls.io/api/v1/jobs
 
   test-formatting:
     runs-on: ubuntu-latest
