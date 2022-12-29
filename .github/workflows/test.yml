@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
 jobs:
-  test-unit-tests:
+  unit-tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout this repository
@@ -44,7 +44,7 @@ jobs:
       - name: Send code coverage info to Coveralls
         run: curl -v -F json_file=@build/coverage.json https://coveralls.io/api/v1/jobs
 
-  test-warning-check:
+  check-warning:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout this repository
@@ -59,7 +59,7 @@ jobs:
       - name: Build targets
         run: cmake --build build
 
-  test-formatting-check:
+  check-formatting:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout this repository
