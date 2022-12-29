@@ -19,19 +19,19 @@ jobs:
         run: cmake --build build
 
       - name: Run unit tests
-        run: ctest --verbose --test-dir build --no-compress-output -T Test || true
+        id: run_tests
+        run: ctest --verbose --test-dir build --no-compress-output -T Test
 
-      - name: Download Testspace client
-        run: curl -fsSL https://testspace-client.s3.amazonaws.com/testspace-linux.tgz | tar -zxvf- -C build
-
-      - name: Configure Testspace client
-        run: |
-          build/testspace config url ${{ secrets.TESTSPACE_URL }}
-          build/testspace config project ${{ secrets.TESTSPACE_PROJECT }}
-          build/testspace config space ${{ github.ref_name }}
+      - name: Setup Testspace client
+        id: setup_testspace
+        if: steps.run_tests.outcome == 'success' || steps.run_tests.outcome == 'failed'
+        uses: testspace-com/setup-testspace@v1.0.5
+        with:
+          domain: ${{github.repository_owner}}
 
       - name: Send test result to Testspace
-        run: build/testspace [Tests]"build/Testing/*/Test.xml"
+        if: steps.setup_testspace.outcome == 'success'
+        run: testspace [Tests]"build/Testing/*/Test.xml"
 
       - name: Install gcovr
         run: pip3 install gcovr
