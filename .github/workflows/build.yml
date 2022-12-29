@@ -4,16 +4,16 @@ on:
   push:
 jobs:
   release:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout this repository
-        uses: actions/checkout@v2.5.0
+        uses: actions/checkout@v3.2.0
 
-      - name: Install LLVM and Ninja
-        run: sudo apt install llvm ninja-build
+      - name: Install Ninja
+        run: sudo apt install ninja-build
 
       - name: Configure CMake
-        run: cmake . -B build -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -G Ninja
+        run: cmake . -B build -G Ninja
 
       - name: Build targets
         run: cmake --build build
