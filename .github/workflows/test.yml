@@ -8,8 +8,6 @@ jobs:
     steps:
       - name: Checkout this repository
         uses: actions/checkout@v3.2.0
-        with:
-          fetch-depth: 0
 
       - name: Install LLVM and Ninja
         run: sudo apt install llvm ninja-build
@@ -51,8 +49,6 @@ jobs:
     steps:
       - name: Checkout this repository
         uses: actions/checkout@v3.2.0
-        with:
-          fetch-depth: 0
 
       - name: Install Ninja
         run: sudo apt install ninja-build
@@ -68,8 +64,6 @@ jobs:
     steps:
       - name: Checkout this repository
         uses: actions/checkout@v3.2.0
-        with:
-          fetch-depth: 0
 
       - name: Install cmake-format
         run: pip3 install cmake-format

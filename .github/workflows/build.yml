@@ -8,8 +8,6 @@ jobs:
     steps:
       - name: Checkout this repository
         uses: actions/checkout@v2.5.0
-        with:
-          fetch-depth: 0
 
       - name: Install LLVM and Ninja
         run: sudo apt install llvm ninja-build
