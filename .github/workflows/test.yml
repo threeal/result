@@ -15,7 +15,7 @@ jobs:
         run: sudo apt install llvm ninja-build
 
       - name: Configure CMake
-        run: cmake . -B build -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -G Ninja -DBUILD_TESTING=ON -DCMAKE_CXX_FLAGS='-Werror'
+        run: cmake . -B build -G Ninja -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DBUILD_TESTING=ON
 
       - name: Build targets
         run: cmake --build build
@@ -46,7 +46,24 @@ jobs:
       - name: Send code coverage info to Coveralls
         run: curl -v -F json_file=@build/coverage.json https://coveralls.io/api/v1/jobs
 
-  test-formatting:
+  test-warning-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout this repository
+        uses: actions/checkout@v3.2.0
+        with:
+          fetch-depth: 0
+
+      - name: Install Ninja
+        run: sudo apt install ninja-build
+
+      - name: Configure CMake
+        run: cmake . -B build -G Ninja -DCMAKE_CXX_FLAGS='-Werror' -DBUILD_TESTING=ON
+
+      - name: Build targets
+        run: cmake --build build
+
+  test-formatting-check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout this repository
