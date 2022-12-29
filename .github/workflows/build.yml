@@ -9,11 +9,20 @@ jobs:
       - name: Checkout this repository
         uses: actions/checkout@v3.2.0
 
-      - name: Install Ninja
-        run: sudo apt install ninja-build
+      - name: Configure CMake
+        run: cmake . -B build
+
+      - name: Build targets
+        run: cmake --build build
+
+  release-msvc:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout this repository
+        uses: actions/checkout@v3.2.0
 
       - name: Configure CMake
-        run: cmake . -B build -G Ninja
+        run: cmake . -B build
 
       - name: Build targets
         run: cmake --build build
