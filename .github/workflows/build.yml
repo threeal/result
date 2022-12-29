@@ -2,74 +2,18 @@ name: build
 on:
   workflow_dispatch:
   push:
-    branches: ['**']
 jobs:
   release:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout this repository
-        uses: actions/checkout@v2.5.0
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v3.2.0
 
-      - name: Install LLVM and Ninja
-        run: sudo apt install llvm ninja-build
+      - name: Install Ninja
+        run: sudo apt install ninja-build
 
       - name: Configure CMake
-        run: cmake . -B build -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -G Ninja
+        run: cmake . -B build -G Ninja
 
       - name: Build targets
         run: cmake --build build
-
-  test:
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout this repository
-        uses: actions/checkout@v2.5.0
-        with:
-          fetch-depth: 0
-
-      - name: Install LLVM and Ninja
-        run: sudo apt install llvm ninja-build
-
-      - name: Install cmake-format
-        run: pip3 install cmake-format
-
-      - name: Configure CMake
-        run: cmake . -B build -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -G Ninja -DBUILD_TESTING=ON -DCMAKE_CXX_FLAGS='-Werror'
-
-      - name: Check code formatting
-        run: cmake --build build --target check-format
-
-      - name: Build targets
-        run: cmake --build build
-
-      - name: Run tests
-        run: ctest --verbose --test-dir build --no-compress-output -T Test || true
-
-      - name: Download Testspace client
-        run: curl -fsSL https://testspace-client.s3.amazonaws.com/testspace-linux.tgz | tar -zxvf- -C build
-
-      - name: Configure Testspace client
-        working-directory: build
-        run: |
-          ./testspace config url ${{ secrets.TESTSPACE_URL }}
-          ./testspace config project ${{ secrets.TESTSPACE_PROJECT }}
-          ./testspace config space ${{ github.ref_name }}
-
-      - name: Send test result to Testspace
-        working-directory: build
-        run: ./testspace [Tests]"Testing/*/Test.xml"
-
-      - name: Install gcovr
-        run: pip3 install gcovr
-
-      - name: Generate code coverage info
-        working-directory: build
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-        run: gcovr -r .. --gcov-executable 'llvm-cov gcov' --exclude-directories _deps -e _deps --coveralls coverage.json
-
-      - name: Send code coverage info to Coveralls
-        working-directory: build
-        run: curl -v -F json_file=@coverage.json https://coveralls.io/api/v1/jobs
