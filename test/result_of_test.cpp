@@ -8,7 +8,9 @@ TEST_CASE("check ok result-of") {
 }
 
 TEST_CASE("check error result-of") {
-  const res::ResultOf<int> res = res::Err("unknown error");
+  res::ResultOf<int> res;
+  SECTION("from string") { res = res::Err("unknown error"); }
+  SECTION("from stream") { res = res::ErrStream() << "unknown error: " << 500; }
   REQUIRE(res.is_err());
   REQUIRE_FALSE(res.is_ok());
 }
@@ -31,8 +33,16 @@ TEST_CASE("call `unwrap` on error result-of") {
 }
 
 TEST_CASE("call `unwrap_err` on error result-of") {
-  const std::string err_msg = "unknown error";
-  const res::ResultOf<int> res = res::Err(err_msg);
+  res::Result res;
+  std::string err_msg;
+  SECTION("from string") {
+    res = res::Err("unknown error");
+    err_msg = "unknown error";
+  }
+  SECTION("from stream") {
+    res = res::ErrStream() << "unknown error: " << 500;
+    err_msg = "unknown error: 500";
+  }
   REQUIRE(res.is_err());
   REQUIRE(res.unwrap_err() == err_msg);
 }

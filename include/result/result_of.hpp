@@ -18,6 +18,8 @@ class ResultOf {
   ResultOf() : ResultOf(Err("result-of is uninitialized")) {}
   ResultOf(const T& data) : data(data), data_is_err(false) {}
   ResultOf(const Err& err) : data(err), data_is_err(true) {}
+  ResultOf(const ErrStream& err_stream)
+      : data(err_stream.str()), data_is_err(true) {}
 
   template <typename U>
   explicit operator ResultOf<U>() const {
