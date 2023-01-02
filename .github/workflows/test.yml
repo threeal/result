@@ -24,7 +24,7 @@ jobs:
 
       - name: Setup Testspace client
         id: setup_testspace
-        if: steps.run_tests.outcome == 'success' || steps.run_tests.outcome == 'failed'
+        if: steps.run_tests.outcome == 'success' || steps.run_tests.outcome == 'failure'
         uses: testspace-com/setup-testspace@v1.0.5
         with:
           domain: ${{github.repository_owner}}
@@ -33,16 +33,14 @@ jobs:
         if: steps.setup_testspace.outcome == 'success'
         run: testspace [Tests]"build/Testing/*/Test.xml"
 
-      - name: Install gcovr
-        run: pip3 install gcovr
-
-      - name: Generate code coverage info
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-        run: gcovr --gcov-executable 'llvm-cov gcov' -e 'build/*' --coveralls build/coverage.json
-
-      - name: Send code coverage info to Coveralls
-        run: curl -v -F json_file=@build/coverage.json https://coveralls.io/api/v1/jobs
+      - name: Generate and send code coverage report to Coveralls
+        if: steps.run_tests.outcome == 'success' || steps.run_tests.outcome == 'failure'
+        uses: threeal/gcovr-action@v0.1.0
+        with:
+          gcov-executable: llvm-cov gcov
+          exclude: build/*
+          coveralls-send: true
+          coveralls-repo-token: ${{ secrets.COVERALLS_REPO_TOKEN }}
 
   check-warning:
     runs-on: ubuntu-latest
