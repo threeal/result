@@ -16,6 +16,7 @@ class Result {
   Result() : Result(Err("result is uninitialized")) {}
   Result(const Ok&) {}
   Result(const Err& err) : err_opt(err) {}
+  Result(const ErrStream& err_stream) : err_opt(err_stream.str()) {}
 
   bool is_ok() const { return !err_opt.has_value(); }
   bool is_err() const { return err_opt.has_value(); }
