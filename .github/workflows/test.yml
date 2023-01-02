@@ -34,6 +34,7 @@ jobs:
         run: testspace [Tests]"build/Testing/*/Test.xml"
 
       - name: Generate and send code coverage report to Coveralls
+        if: steps.run_tests.outcome == 'success' || steps.run_tests.outcome == 'failure'
         uses: threeal/gcovr-action@v0.1.0
         with:
           gcov-executable: llvm-cov gcov
