@@ -11,4 +11,8 @@ TEST_CASE("create error") {
     res::Err err("unknown error");
     REQUIRE(err == std::string("unknown error"));
   }
+  SECTION("from stream") {
+    res::Err err = res::ErrStream() << "unknown error: " << 500;
+    REQUIRE(err == std::string("unknown error: 500"));
+  }
 }
