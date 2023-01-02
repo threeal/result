@@ -9,7 +9,9 @@ TEST_CASE("check ok result") {
 }
 
 TEST_CASE("check error result") {
-  const res::Result res = res::Err("unknown error");
+  res::Result res;
+  SECTION("from string") { res = res::Err("unknown error"); }
+  SECTION("from stream") { res = res::ErrStream() << "unknown error: " << 500; }
   REQUIRE(res.is_err());
   REQUIRE_FALSE(res.is_ok());
 }
@@ -20,8 +22,16 @@ TEST_CASE("uninitialized result contains error") {
 }
 
 TEST_CASE("call `unwrap_err` on error result") {
-  const std::string err_msg = "unknown error";
-  const res::Result res = res::Err(err_msg);
+  res::Result res;
+  std::string err_msg;
+  SECTION("from string") {
+    res = res::Err("unknown error");
+    err_msg = "unknown error";
+  }
+  SECTION("from stream") {
+    res = res::ErrStream() << "unknown error: " << 500;
+    err_msg = "unknown error: 500";
+  }
   REQUIRE(res.is_err());
   REQUIRE(res.unwrap_err() == err_msg);
 }
