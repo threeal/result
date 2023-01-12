@@ -16,7 +16,7 @@ cpmaddpackage("gh:TheLartians/Format.cmake@1.7.3")
 add_library(result INTERFACE)
 target_include_directories(result INTERFACE include)
 
-if(BUILD_TESTING)
+if(BUILD_TESTING AND CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
   enable_testing()
 
   cpmaddpackage("gh:catchorg/Catch2@3.2.0")
