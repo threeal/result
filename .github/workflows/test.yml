@@ -62,12 +62,10 @@ jobs:
       - name: Checkout this repository
         uses: actions/checkout@v3.2.0
 
-      - name: Configure and build this project
-        uses: threeal/cmake-action@v1.0.0
-        with:
-          cxx-compiler: cl
-          cxx-flags: /WX
-          args: -DBUILD_TESTING=ON
+      - name: Configure and build this project # TODO: use threeal/cmake-action
+        run: |
+          cmake . -B build -DCMAKE_CXX_COMPILER=cl -DCMAKE_CXX_FLAGS=/WX -DBUILD_TESTING=ON
+          cmake --build build
 
   check-formatting:
     runs-on: ubuntu-latest
