@@ -64,7 +64,6 @@ jobs:
       - name: Configure and build this project
         uses: threeal/cmake-action@v1.0.0
         with:
-          generator: Ninja
           c-compiler: cl
           cxx-compiler: cl
           c-flags: /WX
