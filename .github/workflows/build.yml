@@ -21,5 +21,4 @@ jobs:
       - name: Configure and build this project
         uses: threeal/cmake-action@v1.0.0
         with:
-          c-compiler: cl
           cxx-compiler: cl
