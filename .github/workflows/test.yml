@@ -9,14 +9,13 @@ jobs:
       - name: Checkout this repository
         uses: actions/checkout@v3.2.0
 
-      - name: Install LLVM and Ninja
-        run: sudo apt install llvm ninja-build
-
-      - name: Configure CMake
-        run: cmake . -B build -G Ninja -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DBUILD_TESTING=ON
-
-      - name: Build targets
-        run: cmake --build build
+      - name: Configure and build this project
+        uses: threeal/cmake-action@v1.0.0
+        with:
+          generator: Ninja
+          c-compiler: clang
+          cxx-compiler: clang++
+          args: -DBUILD_TESTING=ON
 
       - name: Run unit tests
         id: run_tests
@@ -48,14 +47,13 @@ jobs:
       - name: Checkout this repository
         uses: actions/checkout@v3.2.0
 
-      - name: Install Ninja
-        run: sudo apt install ninja-build
-
-      - name: Configure CMake
-        run: cmake . -B build -G Ninja -DCMAKE_CXX_FLAGS='-Werror' -DBUILD_TESTING=ON
-
-      - name: Build targets
-        run: cmake --build build
+      - name: Configure and build this project
+        uses: threeal/cmake-action@v1.0.0
+        with:
+          generator: Ninja
+          c-flags: -Werror
+          cxx-flags: -Werror
+          args: -DBUILD_TESTING=ON
 
   check-warning-msvc:
     runs-on: windows-latest
@@ -63,14 +61,15 @@ jobs:
       - name: Checkout this repository
         uses: actions/checkout@v3.2.0
 
-      - name: Install Ninja
-        run: choco install -y ninja
-
-      - name: Configure CMake
-        run: cmake . -B build -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DCMAKE_CXX_FLAGS=/WX -DBUILD_TESTING=ON
-
-      - name: Build targets
-        run: cmake --build build
+      - name: Configure and build this project
+        uses: threeal/cmake-action@v1.0.0
+        with:
+          generator: Ninja
+          c-compiler: cl
+          cxx-compiler: cl
+          c-flags: /WX
+          cxx-flags: /WX
+          args: -DBUILD_TESTING=ON
 
   check-formatting:
     runs-on: ubuntu-latest
@@ -81,10 +80,7 @@ jobs:
       - name: Install cmake-format
         run: pip3 install cmake-format
 
-      - name: Configure CMake
-        run: cmake . -B build
-
-      - name: Check code formatting
-        run: |
-          cmake --build build --target format
-          cmake --build build --target check-format
+      - name: Configure and check formatting
+        uses: threeal/cmake-action@v1.0.0
+        with:
+          targets: format check-format
