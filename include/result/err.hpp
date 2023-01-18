@@ -5,8 +5,8 @@
 
 namespace res {
 
-/** A helper struct for composing an error message using a stream operation.
- * Use this action to replace res::Err for generating an error message
+/** A helper struct for composing an error message using stream operation.
+ * Use this struct to replace res::Err for generating an error message
  * dynamically.
  *
  * @code
@@ -18,7 +18,7 @@ namespace res {
 struct ErrStream : public std::stringstream {};
 
 /** A type that represents an error status (failure).
- * Use this type on res::Result or res::ResultOf to set the status of those data
+ * Use this type on res::Result or res::ResultOf to set the status of that data
  * to be failed.
  *
  * @code
@@ -35,7 +35,7 @@ struct Err : public std::string {
   /** Construct new error data using a C++ string.
    * @param err_msg The error message.
    *
-   * @code{.cpp}
+   * @code
    * res::Err err = std::string("undefined error");
    * assert(err == "undefined error");
    * @endcode
@@ -45,7 +45,7 @@ struct Err : public std::string {
   /** Construct new error data using a C-style string.
    * @param err_msg The error message.
    *
-   * @code{.cpp}
+   * @code
    * res::Err err = "unknown error";
    * assert(err == "unknown error");
    * @endcode
@@ -55,7 +55,7 @@ struct Err : public std::string {
   /** Construct new error data using an error stream.
    * @param err_stream The error stream.
    *
-   * @code{.cpp}
+   * @code
    * res::Err err = res::ErrStream() << "not found " << 404;
    * assert(err == "not found 404");
    * @endcode
