@@ -1,8 +1,6 @@
 #include <catch2/catch_test_macros.hpp>
-#include <result/ok.hpp>
 #include <result/result.hpp>
 #include <result/result_of.hpp>
-#include <string>
 
 #undef assert
 #define assert REQUIRE
@@ -13,6 +11,15 @@ TEST_CASE("test code snippet") {
     assert(result.is_ok());
     result = res::Err("undefined error");
     assert(result.is_err());
+  }
+  SECTION("res::ResultOf struct") {
+    res::ResultOf<int> result_of_int = 32;
+    assert(result_of_int.is_ok());
+    assert(result_of_int.unwrap() == 32);
+
+    result_of_int = res::Err("undefined error");
+    assert(result_of_int.is_err());
+    assert(result_of_int.unwrap_err() == "undefined error");
   }
   SECTION("res::Ok struct") {
     res::Result result = res::Ok();

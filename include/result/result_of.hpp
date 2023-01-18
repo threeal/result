@@ -8,6 +8,23 @@
 
 namespace res {
 
+/** A type used for returning and propagating a value or an error.
+ * This type could either have an ok status (success) which contains a value or
+ * an error status (failure) which contains an error.
+ * Use res::Result if the type does not need to contain a value when the status
+ * is ok.
+ * @tparam T The type of the value.
+ *
+ * @code
+ * res::ResultOf<int> result_of_int = 32;
+ * assert(result_of_int.is_ok());
+ * assert(result_of_int.unwrap() == 32);
+ *
+ * result_of_int = res::Err("undefined error");
+ * assert(result_of_int.is_err());
+ * assert(result_of_int.unwrap_err() == "undefined error");
+ * @endcode
+ */
 template <typename T>
 class ResultOf {
  private:
