@@ -1,6 +1,11 @@
 License
 =======
 
+.. image:: https://opensource.org/files/OSIApproved_1.png
+   :width: 150
+   :align: right
+   :target: https://opensource.org/licenses
+
 This project is licensed under the terms of the `MIT License`_.
 
 Copyright © 2022-2023 `Alfi Maulana`_
