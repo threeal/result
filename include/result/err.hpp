@@ -15,7 +15,7 @@ struct Err : public std::string {
    * @code{.cpp}
    * std::string err_msg = "undefined error";
    * res::Result result = res::Err(err_msg);
-   * assert(result.is_err());
+   * assert(result.is_err());  // OK
    * @endcode
    */
   Err(const std::string& err_msg) : std::string(err_msg) {}
@@ -25,7 +25,7 @@ struct Err : public std::string {
    *
    * @code{.cpp}
    * res::Result result = res::Err("undefined error");
-   * assert(result.is_err());
+   * assert(result.is_err());  // OK
    * @endcode
    */
   Err(const char* err_msg) : std::string(err_msg) {}

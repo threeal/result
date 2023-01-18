@@ -8,7 +8,7 @@ struct Ok {
    *
    * @code{.cpp}
    * res::Result result = res::Ok();
-   * assert(result.is_ok());
+   * assert(result.is_ok());  // OK
    * @endcode
    */
   Ok() {}
