@@ -1,0 +1,10 @@
+PROJECT_NAME = "Result"
+PROJECT_BRIEF= "A simple C++ implementation of Rust Result, an alternative to Abseil Status."
+INPUT = ../include
+RECURSIVE = YES
+EXTRACT_ALL = YES
+SORT_MEMBER_DOCS = NO
+GENERATE_HTML = NO
+GENERATE_LATEX = NO
+GENERATE_XML = YES
+XML_OUTPUT = _xml
