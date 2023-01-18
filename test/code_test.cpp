@@ -9,10 +9,8 @@
 
 TEST_CASE("test code snippet") {
   SECTION("res::Ok struct") {
-    SECTION("Ok() constructor") {
-      res::Result result = res::Ok();
-      assert(result.is_ok());
-    }
+    res::Result result = res::Ok();
+    assert(result.is_ok());
   }
   SECTION("res::Err struct") {
     SECTION("res::Err struct") {
