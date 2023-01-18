@@ -32,4 +32,9 @@ TEST_CASE("test code snippet") {
       assert(err == "not found 404");
     }
   }
+  SECTION("res::ErrStream struct") {
+    res::Result result = res::ErrStream() << "not found " << 404;
+    assert(result.is_err());
+    assert(result.unwrap_err() == "not found 404");
+  }
 }

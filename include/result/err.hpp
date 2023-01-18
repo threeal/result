@@ -5,6 +5,16 @@
 
 namespace res {
 
+/** A helper struct for composing an error message using a stream operation.
+ * Use this action to replace res::Err for generating an error message
+ * dynamically.
+ *
+ * @code
+ * res::Result result = res::ErrStream() << "not found " << 404;
+ * assert(result.is_err());
+ * assert(result.unwrap_err() == "not found 404");
+ * @endcode
+ */
 struct ErrStream : public std::stringstream {};
 
 /** A type that represents an error status (failure).
