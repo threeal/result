@@ -6,3 +6,4 @@ API Documentation
 
    result.rst
    result_of.rst
+   utils.rst
