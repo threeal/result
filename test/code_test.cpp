@@ -16,4 +16,8 @@ TEST_CASE("test code snippet") {
     res::Result result = res::Err(err_msg);
     assert(result.is_err());
   }
+  SECTION("Err::Err(const char*)") {
+    res::Result result = res::Err("undefined error");
+    assert(result.is_err());
+  }
 }
