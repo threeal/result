@@ -20,4 +20,8 @@ TEST_CASE("test code snippet") {
     res::Result result = res::Err("undefined error");
     assert(result.is_err());
   }
+  SECTION("Err::Err(const ErrStream&)") {
+    res::Err err = res::ErrStream() << "not found " << 404;
+    assert(err == "not found 404");
+  }
 }
