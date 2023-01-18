@@ -9,15 +9,17 @@
 namespace res {
 
 /** A type used for returning and propagating an error.
- * This type could either have an ok status (success) which does not contain any
- * error or have an error status (failure) which does contain an error.
- * Use res::ResultOf if the type needs to contain data when the status is ok.
+ * This type could either have an ok status (success) which does not contain an
+ * error or have an error status (failure) which contains an error.
+ * Use res::ResultOf if the type needs to contain a value when the status is ok.
  *
  * @code
  * res::Result result = res::Ok();
  * assert(result.is_ok());
+ *
  * result = res::Err("undefined error");
  * assert(result.is_err());
+ * assert(result.unwrap_err() == "undefined error");
  * @endcode
  */
 class Result {

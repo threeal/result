@@ -9,8 +9,10 @@ TEST_CASE("test code snippet") {
   SECTION("res::Result struct") {
     res::Result result = res::Ok();
     assert(result.is_ok());
+
     result = res::Err("undefined error");
     assert(result.is_err());
+    assert(result.unwrap_err() == "undefined error");
   }
   SECTION("res::ResultOf struct") {
     res::ResultOf<int> result_of_int = 32;
