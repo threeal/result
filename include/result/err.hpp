@@ -9,23 +9,22 @@ struct ErrStream : public std::stringstream {};
 
 /** A type that represents an error status (failure). */
 struct Err : public std::string {
-  /** Construct a new error data using a C++ string.
-   * @param err_msg Error message in C++ string.
+  /** Construct new error data using a C++ string.
+   * @param err_msg The error message.
    *
    * @code{.cpp}
-   * std::string err_msg = "undefined error";
-   * res::Result result = res::Err(err_msg);
-   * assert(result.is_err());  // OK
+   * res::Err err = std::string("undefined error");
+   * assert(err == "undefined error");
    * @endcode
    */
   Err(const std::string& err_msg) : std::string(err_msg) {}
 
-  /** Construct a new error data using a C-style string.
-   * @param err_msg Error message in C-style string.
+  /** Construct new error data using a C-style string.
+   * @param err_msg The error message.
    *
    * @code{.cpp}
-   * res::Result result = res::Err("undefined error");
-   * assert(result.is_err());  // OK
+   * res::Err err = "unknown error";
+   * assert(err == "unknown error");
    * @endcode
    */
   Err(const char* err_msg) : std::string(err_msg) {}

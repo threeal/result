@@ -15,13 +15,12 @@ TEST_CASE("test code snippet") {
   }
   SECTION("res::Err struct") {
     SECTION("Err(const std::string&) constructor") {
-      std::string err_msg = "undefined error";
-      res::Result result = res::Err(err_msg);
-      assert(result.is_err());
+      res::Err err = std::string("undefined error");
+      assert(err == "undefined error");
     }
     SECTION("Err(const char*) constructor") {
-      res::Result result = res::Err("undefined error");
-      assert(result.is_err());
+      res::Err err = "unknown error";
+      assert(err == "unknown error");
     }
     SECTION("Err(const ErrStream&) constructor") {
       res::Err err = res::ErrStream() << "not found " << 404;
