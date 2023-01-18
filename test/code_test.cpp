@@ -8,6 +8,12 @@
 #define assert REQUIRE
 
 TEST_CASE("test code snippet") {
+  SECTION("res::Result struct") {
+    res::Result result = res::Ok();
+    assert(result.is_ok());
+    result = res::Err("undefined error");
+    assert(result.is_err());
+  }
   SECTION("res::Ok struct") {
     res::Result result = res::Ok();
     assert(result.is_ok());
