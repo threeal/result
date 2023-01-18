@@ -7,7 +7,20 @@ namespace res {
 
 struct ErrStream : public std::stringstream {};
 
-/** A type that represents an error status (failure). */
+/** A type that represents an error status (failure).
+ * Use this type on res::Result or res::ResultOf to set the status of those data
+ * to be failed.
+ *
+ * @code
+ * res::Result result = res::Err("undefined error");
+ * assert(result.is_err());
+ * @endcode
+ *
+ * @code
+ * res::ResultOf<int> result_of_int = res::Err("undefined error");
+ * assert(result_of_int.is_err());
+ * @endcode
+ */
 struct Err : public std::string {
   /** Construct new error data using a C++ string.
    * @param err_msg The error message.
@@ -39,4 +52,5 @@ struct Err : public std::string {
    */
   Err(const ErrStream& err_stream) : std::string(err_stream.str()) {}
 };
+
 }  // namespace res
