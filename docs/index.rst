@@ -9,6 +9,7 @@ A simple C++ implementation of `Rust Result`_, an alternative to `Abseil Status`
    :maxdepth: 1
 
    api_documentation/index.rst
+   license.rst
 
 .. |build_status_badge| image:: https://img.shields.io/github/actions/workflow/status/threeal/result/build.yml?branch=main
 .. _build_status_badge: https://github.com/threeal/result/actions/workflows/build.yml
