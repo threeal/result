@@ -127,13 +127,13 @@ TEST_CASE("test code snippet") {
       assert(err == "unknown error");
     }
     SECTION("Err(const ErrStream&) constructor") {
-      res::Err err = res::ErrStream() << "not found " << 404;
-      assert(err == "not found 404");
+      res::Err err = res::ErrStream() << 404 << " not found";
+      assert(err == "404 not found");
     }
   }
   SECTION("res::ErrStream struct") {
-    res::Result result = res::ErrStream() << "not found " << 404;
+    res::Result result = res::ErrStream() << 404 << " not found";
     assert(result.is_err());
-    assert(result.unwrap_err() == "not found 404");
+    assert(result.unwrap_err() == "404 not found");
   }
 }

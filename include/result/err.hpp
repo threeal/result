@@ -10,9 +10,9 @@ namespace res {
  * dynamically.
  *
  * @code
- * res::Result result = res::ErrStream() << "not found " << 404;
+ * res::Result result = res::ErrStream() << 404 << " not found";
  * assert(result.is_err());
- * assert(result.unwrap_err() == "not found 404");
+ * assert(result.unwrap_err() == "404 not found");
  * @endcode
  */
 struct ErrStream : public std::stringstream {};
@@ -32,7 +32,7 @@ struct ErrStream : public std::stringstream {};
  * @endcode
  */
 struct Err : public std::string {
-  /** Construct new error data using a C++ string.
+  /** Construct a new error data using a C++ string.
    * @param err_msg The error message.
    *
    * @code
@@ -42,7 +42,7 @@ struct Err : public std::string {
    */
   Err(const std::string& err_msg) : std::string(err_msg) {}
 
-  /** Construct new error data using a C-style string.
+  /** Construct a new error data using a C-style string.
    * @param err_msg The error message.
    *
    * @code
@@ -52,12 +52,12 @@ struct Err : public std::string {
    */
   Err(const char* err_msg) : std::string(err_msg) {}
 
-  /** Construct new error data using an error stream.
+  /** Construct a new error data using an error stream.
    * @param err_stream The error stream.
    *
    * @code
-   * res::Err err = res::ErrStream() << "not found " << 404;
-   * assert(err == "not found 404");
+   * res::Err err = res::ErrStream() << 404 << " not found";
+   * assert(err == "404 not found");
    * @endcode
    */
   Err(const ErrStream& err_stream) : std::string(err_stream.str()) {}
