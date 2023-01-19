@@ -68,7 +68,14 @@ class Result {
    */
   Result(const ErrStream& err_stream) : err_opt(err_stream.str()) {}
 
+  /** Check if the status is ok.
+   * @return `true` if the status is ok.
+   */
   bool is_ok() const { return !err_opt.has_value(); }
+
+  /** Check if the status is failed.
+   * @return `true` if the status is failed.
+   */
   bool is_err() const { return err_opt.has_value(); }
 
   const Err& unwrap_err() const {
