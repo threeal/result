@@ -32,6 +32,16 @@ TEST_CASE("test code snippet") {
       assert(result.is_err());
       assert(result.unwrap_err() == "404 not found");
     }
+    SECTION("unwrap_err() function") {
+      res::Result result = res::Err("undefined error");
+      assert(result.unwrap_err() == "undefined error");
+      try {
+        res::Result result = res::Ok();
+        result.unwrap_err();  // throws exception
+        assert(false);
+      } catch (...) {
+      }
+    }
   }
   SECTION("res::ResultOf struct") {
     res::ResultOf<int> result_of_int = 32;

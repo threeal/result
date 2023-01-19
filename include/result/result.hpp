@@ -78,6 +78,21 @@ class Result {
    */
   bool is_err() const { return err_opt.has_value(); }
 
+  /** Get the error data if the status is failed.
+   * This function will throw an exception if the status is not failed.
+   * @return The error data.
+   * @exception std::runtime_error The status is not failed.
+   *
+   * @code
+   * res::Result result = res::Err("undefined error");
+   * assert(result.unwrap_err() == "undefined error");
+   * @endcode
+   *
+   * @code{.cpp}
+   * res::Result result = res::Ok();
+   * result.unwrap_err();  // throws exception
+   * @endcode
+   */
   const Err& unwrap_err() const {
     if (!err_opt.has_value())
       throw std::runtime_error("unable to unwrap error of ok result");
