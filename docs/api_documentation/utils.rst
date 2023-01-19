@@ -1,14 +1,9 @@
 Utils
 =====
 
-.. doxygenstruct:: res::Ok
-   :members:
-   :undoc-members:
+.. toctree::
+   :maxdepth: 1
 
-.. doxygenstruct:: res::Err
-   :members:
-   :undoc-members:
-
-.. doxygenstruct:: res::ErrStream
-   :members:
-   :undoc-members:
+   utilities/ok.rst
+   utilities/error.rst
+   utilities/error_stream.rst
