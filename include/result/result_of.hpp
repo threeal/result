@@ -91,7 +91,14 @@ class ResultOf {
     return static_cast<U>(std::get<T>(data));
   }
 
+  /** Check if the status is ok.
+   * @return `true` if the status is ok.
+   */
   bool is_ok() const { return !data_is_err; }
+
+  /** Check if the status is failed.
+   * @return `true` if the status is failed.
+   */
   bool is_err() const { return data_is_err; }
 
   const T& unwrap() const {
