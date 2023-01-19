@@ -47,7 +47,16 @@ class Result {
    */
   Result([[maybe_unused]] const Ok& ok) {}
 
+  /** Construct a new error result (failure).
+   * @param err The error status.
+   *
+   * @code
+   * res::Result result = res::Err("undefined error");
+   * assert(result.is_err());
+   * @endcode
+   */
   Result(const Err& err) : err_opt(err) {}
+
   Result(const ErrStream& err_stream) : err_opt(err_stream.str()) {}
 
   bool is_ok() const { return !err_opt.has_value(); }

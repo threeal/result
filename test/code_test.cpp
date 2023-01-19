@@ -23,6 +23,10 @@ TEST_CASE("test code snippet") {
       res::Result result = res::Ok();
       assert(result.is_ok());
     }
+    SECTION("Result(const Err&) constructor") {
+      res::Result result = res::Err("undefined error");
+      assert(result.is_err());
+    }
   }
   SECTION("res::ResultOf struct") {
     res::ResultOf<int> result_of_int = 32;
