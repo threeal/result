@@ -85,6 +85,18 @@ class ResultOf {
     return Ok();
   }
 
+  /** Convert into another result-of with a different value type.
+   * If the status is ok, the value data will be cast into the target value
+   * type.
+   * @tparam U The target value type.
+   * @return The converted result-of.
+   *
+   * @code
+   * res::ResultOf<int> result_of_int = 32;
+   * res::ResultOf<float> result_of_float = result_of_int.as<float>();
+   * assert(result_of_float.unwrap() == 32);
+   * @endcode
+   */
   template <typename U>
   ResultOf<U> as() const {
     if (data_is_err) return std::get<Err>(data);
