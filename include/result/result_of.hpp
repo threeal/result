@@ -122,6 +122,21 @@ class ResultOf {
     return std::get<T>(data);
   }
 
+  /** Get the error data if the status is failed.
+   * This function will throw an exception if the status is not failed.
+   * @return The error data.
+   * @exception std::runtime_error The status is not failed.
+   *
+   * @code
+   * res::ResultOf<int> result_of_int = res::Err("undefined error");
+   * assert(result_of_int.unwrap_err() == "undefined error");
+   * @endcode
+   *
+   * @code{.cpp}
+   * res::ResultOf<int> result_of_int = 32;
+   * result_of_int.unwrap_err();  // throws exception
+   * @endcode
+   */
   const Err& unwrap_err() const {
     if (!data_is_err)
       throw std::runtime_error("unable to unwrap error of ok result-of");

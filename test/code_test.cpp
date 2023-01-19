@@ -89,6 +89,20 @@ TEST_CASE("test code snippet") {
         }
       }
     }
+    SECTION("unwrap_err() function") {
+      SECTION("1") {
+        res::ResultOf<int> result_of_int = res::Err("undefined error");
+        assert(result_of_int.unwrap_err() == "undefined error");
+      }
+      SECTION("2") {
+        try {
+          res::ResultOf<int> result_of_int = 32;
+          result_of_int.unwrap_err();  // throws exception
+          assert(false);
+        } catch (...) {
+        }
+      }
+    }
   }
   SECTION("res::Ok struct") {
     res::Result result = res::Ok();
