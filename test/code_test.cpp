@@ -48,13 +48,19 @@ TEST_CASE("test code snippet") {
     }
   }
   SECTION("res::ResultOf struct") {
-    res::ResultOf<int> result_of_int = 32;
-    assert(result_of_int.is_ok());
-    assert(result_of_int.unwrap() == 32);
+    SECTION("res::ResultOf struct") {
+      res::ResultOf<int> result_of_int = 32;
+      assert(result_of_int.is_ok());
+      assert(result_of_int.unwrap() == 32);
 
-    result_of_int = res::Err("undefined error");
-    assert(result_of_int.is_err());
-    assert(result_of_int.unwrap_err() == "undefined error");
+      result_of_int = res::Err("undefined error");
+      assert(result_of_int.is_err());
+      assert(result_of_int.unwrap_err() == "undefined error");
+    }
+    SECTION("ResultOf() constructor") {
+      res::ResultOf<int> result_of_int;
+      assert(result_of_int.is_err());
+    }
   }
   SECTION("res::Ok struct") {
     res::Result result = res::Ok();

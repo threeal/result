@@ -32,7 +32,16 @@ class ResultOf {
   bool data_is_err;
 
  public:
+  /** Construct a new empty result-of.
+   * Defaults to contain an error.
+   *
+   * @code
+   * res::ResultOf<int> result_of_int;
+   * assert(result_of_int.is_err());
+   * @endcode
+   */
   ResultOf() : ResultOf(Err("result-of is uninitialized")) {}
+
   ResultOf(const T& data) : data(data), data_is_err(false) {}
   ResultOf(const Err& err) : data(err), data_is_err(true) {}
   ResultOf(const ErrStream& err_stream)
