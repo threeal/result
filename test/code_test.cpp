@@ -19,6 +19,10 @@ TEST_CASE("test code snippet") {
       res::Result result;
       assert(result.is_err());
     }
+    SECTION("Result(const Ok&) constructor") {
+      res::Result result = res::Ok();
+      assert(result.is_ok());
+    }
   }
   SECTION("res::ResultOf struct") {
     res::ResultOf<int> result_of_int = 32;

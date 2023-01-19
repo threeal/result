@@ -37,7 +37,16 @@ class Result {
    */
   Result() : Result(Err("result is uninitialized")) {}
 
-  Result(const Ok&) {}
+  /** Construct a new ok result (success).
+   * @param ok The ok status.
+   *
+   * @code
+   * res::Result result = res::Ok();
+   * assert(result.is_ok());
+   * @endcode
+   */
+  Result([[maybe_unused]] const Ok& ok) {}
+
   Result(const Err& err) : err_opt(err) {}
   Result(const ErrStream& err_stream) : err_opt(err_stream.str()) {}
 
