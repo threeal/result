@@ -71,6 +71,11 @@ TEST_CASE("test code snippet") {
       assert(result_of_int.is_err());
       assert(result_of_int.unwrap_err() == "404 not found");
     }
+    SECTION("operator ResultOf<U>() function") {
+      res::ResultOf<int> result_of_int = 32;
+      auto result_of_float = static_cast<res::ResultOf<float>>(result_of_int);
+      assert(result_of_float.unwrap() == 32);
+    }
     SECTION("ResultOf<U> as<U>() function") {
       res::ResultOf<int> result_of_int = 32;
       res::ResultOf<float> result_of_float = result_of_int.as<float>();

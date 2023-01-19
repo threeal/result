@@ -74,6 +74,17 @@ class ResultOf {
   ResultOf(const ErrStream& err_stream)
       : data(err_stream.str()), data_is_err(true) {}
 
+  /** Explicitly convert into another result-of with a different value type.
+   * If the status is ok, the value data will be cast into the target value
+   * type. See res::ResultOf::as.
+   * @tparam U the target value type.
+   *
+   * @code
+   * res::ResultOf<int> result_of_int = 32;
+   * auto result_of_float = static_cast<res::ResultOf<float>>(result_of_int);
+   * assert(result_of_float.unwrap() == 32);
+   * @endcode
+   */
   template <typename U>
   explicit operator ResultOf<U>() const {
     if (data_is_err) return std::get<Err>(data);
