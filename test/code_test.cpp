@@ -27,6 +27,11 @@ TEST_CASE("test code snippet") {
       res::Result result = res::Err("undefined error");
       assert(result.is_err());
     }
+    SECTION("Result(const ErrStream&) constructor") {
+      res::Result result = res::ErrStream() << 404 << " not found";
+      assert(result.is_err());
+      assert(result.unwrap_err() == "404 not found");
+    }
   }
   SECTION("res::ResultOf struct") {
     res::ResultOf<int> result_of_int = 32;

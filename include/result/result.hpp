@@ -57,6 +57,15 @@ class Result {
    */
   Result(const Err& err) : err_opt(err) {}
 
+  /** Construct a new error result (failure) using an error stream.
+   * @param err_stream The error stream.
+   *
+   * @code
+   * res::Result result = res::ErrStream() << 404 << " not found";
+   * assert(result.is_err());
+   * assert(result.unwrap_err() == "404 not found");
+   * @endcode
+   */
   Result(const ErrStream& err_stream) : err_opt(err_stream.str()) {}
 
   bool is_ok() const { return !err_opt.has_value(); }
