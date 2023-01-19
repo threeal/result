@@ -62,6 +62,15 @@ class ResultOf {
    */
   ResultOf(const Err& err) : data(err), data_is_err(true) {}
 
+  /** Construct a new error result-of (failure) using an error stream.
+   * @param err_stream The error stream.
+   *
+   * @code
+   * res::ResultOf<int> result_of_int = res::ErrStream() << 404 << " not found";
+   * assert(result_of_int.is_err());
+   * assert(result_of_int.unwrap_err() == "404 not found");
+   * @endcode
+   */
   ResultOf(const ErrStream& err_stream)
       : data(err_stream.str()), data_is_err(true) {}
 

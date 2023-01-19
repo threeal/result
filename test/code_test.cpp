@@ -69,6 +69,12 @@ TEST_CASE("test code snippet") {
       res::ResultOf<int> result_of_int = res::Err("undefined error");
       assert(result_of_int.is_err());
     }
+    SECTION("ResultOf(const ErrStream&) constructor") {
+      res::ResultOf<int> result_of_int =  //
+          res::ErrStream() << 404 << " not found";
+      assert(result_of_int.is_err());
+      assert(result_of_int.unwrap_err() == "404 not found");
+    }
   }
   SECTION("res::Ok struct") {
     res::Result result = res::Ok();
