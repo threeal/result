@@ -52,7 +52,16 @@ class ResultOf {
    */
   ResultOf(const T& val) : data(val), data_is_err(false) {}
 
+  /** Construct a new error result-of (failure).
+   * @param err The error status.
+   *
+   * @code
+   * res::ResultOf<int> result_of_int = res::Err("undefined error");
+   * assert(result_of_int.is_err());
+   * @endcode
+   */
   ResultOf(const Err& err) : data(err), data_is_err(true) {}
+
   ResultOf(const ErrStream& err_stream)
       : data(err_stream.str()), data_is_err(true) {}
 
