@@ -101,6 +101,21 @@ class ResultOf {
    */
   bool is_err() const { return data_is_err; }
 
+  /** Get the value data if the status is ok.
+   * This function will throw an exception if the status is not ok.
+   * @return The value data.
+   * @exception std::runtime_error The status is not ok.
+   *
+   * @code
+   * res::ResultOf<int> result_of_int = 32;
+   * assert(result_of_int.unwrap() == 32);
+   * @endcode
+   *
+   * @code{.cpp}
+   * res::ResultOf<int> result_of_int = res::Err("undefined error");
+   * result_of_int.unwrap();  // throws exception
+   * @endcode
+   */
   const T& unwrap() const {
     if (data_is_err)
       throw std::runtime_error("unable to unwrap content of error result-of");

@@ -75,6 +75,20 @@ TEST_CASE("test code snippet") {
       assert(result_of_int.is_err());
       assert(result_of_int.unwrap_err() == "404 not found");
     }
+    SECTION("unwrap_err() function") {
+      SECTION("1") {
+        res::ResultOf<int> result_of_int = 32;
+        assert(result_of_int.unwrap() == 32);
+      }
+      SECTION("2") {
+        try {
+          res::ResultOf<int> result_of_int = res::Err("undefined error");
+          result_of_int.unwrap();  // throws exception
+          assert(false);
+        } catch (...) {
+        }
+      }
+    }
   }
   SECTION("res::Ok struct") {
     res::Result result = res::Ok();
