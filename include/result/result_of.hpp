@@ -91,6 +91,15 @@ class ResultOf {
     return static_cast<U>(std::get<T>(data));
   }
 
+  /** Implicitly Convert into a result.
+   * If the status is ok, the value data won't be stored in the new result.
+   *
+   * @code
+   * res::ResultOf<int> result_of_int = 32;
+   * res::Result result = result_of_int;
+   * assert(result.is_ok());
+   * @endcode
+   */
   operator Result() const {
     if (data_is_err) return std::get<Err>(data);
     return Ok();

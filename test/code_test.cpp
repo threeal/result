@@ -76,6 +76,11 @@ TEST_CASE("test code snippet") {
       auto result_of_float = static_cast<res::ResultOf<float>>(result_of_int);
       assert(result_of_float.unwrap() == 32);
     }
+    SECTION("operator Result() function") {
+      res::ResultOf<int> result_of_int = 32;
+      res::Result result = result_of_int;
+      assert(result.is_ok());
+    }
     SECTION("ResultOf<U> as<U>() function") {
       res::ResultOf<int> result_of_int = 32;
       res::ResultOf<float> result_of_float = result_of_int.as<float>();
