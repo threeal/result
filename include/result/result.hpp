@@ -27,7 +27,16 @@ class Result {
   std::optional<Err> err_opt;
 
  public:
+  /** Construct a new empty result.
+   * Defaults to contain an error.
+   *
+   * @code
+   * res::Result result;
+   * assert(result.is_err());
+   * @endcode
+   */
   Result() : Result(Err("result is uninitialized")) {}
+
   Result(const Ok&) {}
   Result(const Err& err) : err_opt(err) {}
   Result(const ErrStream& err_stream) : err_opt(err_stream.str()) {}
