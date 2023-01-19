@@ -8,7 +8,7 @@ A simple C++ implementation of `Rust Result`_, an alternative to `Abseil Status`
 .. toctree::
    :maxdepth: 1
 
-   api_documentation/index.rst
+   api_docs.rst
    license.rst
 
 .. |build_status_badge| image:: https://img.shields.io/github/actions/workflow/status/threeal/result/build.yml?branch=main
