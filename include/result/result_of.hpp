@@ -42,7 +42,16 @@ class ResultOf {
    */
   ResultOf() : ResultOf(Err("result-of is uninitialized")) {}
 
-  ResultOf(const T& data) : data(data), data_is_err(false) {}
+  /** Construct a new ok result-of (success) that contains a value.
+   * @param val The value.
+   *
+   * @code
+   * res::ResultOf<int> result_of_int = 32;
+   * assert(result_of_int.is_ok());
+   * @endcode
+   */
+  ResultOf(const T& val) : data(val), data_is_err(false) {}
+
   ResultOf(const Err& err) : data(err), data_is_err(true) {}
   ResultOf(const ErrStream& err_stream)
       : data(err_stream.str()), data_is_err(true) {}

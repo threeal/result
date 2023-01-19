@@ -61,6 +61,10 @@ TEST_CASE("test code snippet") {
       res::ResultOf<int> result_of_int;
       assert(result_of_int.is_err());
     }
+    SECTION("ResultOf(const T&) constructor") {
+      res::ResultOf<int> result_of_int = 32;
+      assert(result_of_int.is_ok());
+    }
   }
   SECTION("res::Ok struct") {
     res::Result result = res::Ok();
