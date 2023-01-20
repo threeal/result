@@ -23,7 +23,7 @@ jobs:
       - name: Setup Testspace client
         id: setup_testspace
         if: steps.run_tests.outcome == 'success' || steps.run_tests.outcome == 'failure'
-        uses: testspace-com/setup-testspace@v1.0.5
+        uses: testspace-com/setup-testspace@v1.0.6
         with:
           domain: ${{github.repository_owner}}
 
