@@ -31,9 +31,6 @@ jobs:
         if: steps.setup_testspace.outcome == 'success'
         run: testspace [Tests]"build/Testing/*/Test.xml"
 
-      - name: Install LLVM
-        run: sudo apt install llvm
-
       - name: Generate and send code coverage report to Coveralls
         if: steps.run_tests.outcome == 'success' || steps.run_tests.outcome == 'failure'
         uses: threeal/gcovr-action@v0.2.0
