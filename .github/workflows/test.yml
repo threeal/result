@@ -10,7 +10,7 @@ jobs:
         uses: actions/checkout@v3.3.0
 
       - name: Configure and build this project
-        uses: threeal/cmake-action@v1.0.0
+        uses: threeal/cmake-action@v1.1.0
         with:
           generator: Ninja
           cxx-compiler: clang++
@@ -47,7 +47,7 @@ jobs:
         uses: actions/checkout@v3.3.0
 
       - name: Configure and build this project
-        uses: threeal/cmake-action@v1.0.0
+        uses: threeal/cmake-action@v1.1.0
         with:
           generator: Ninja
           cxx-flags: -Werror
@@ -74,6 +74,6 @@ jobs:
         run: pip3 install cmake-format
 
       - name: Configure and check formatting
-        uses: threeal/cmake-action@v1.0.0
+        uses: threeal/cmake-action@v1.1.0
         with:
           targets: format check-format
