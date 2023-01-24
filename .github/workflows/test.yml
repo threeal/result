@@ -9,20 +9,19 @@ jobs:
       - name: Checkout this repository
         uses: actions/checkout@v3.3.0
 
-      - name: Configure and build this project
-        uses: threeal/cmake-action@v1.0.0
+      - name: Configure, build, and test this project
+        id: cmake_action
+        uses: threeal/cmake-action@v1.1.0
         with:
           generator: Ninja
           cxx-compiler: clang++
           args: -DBUILD_TESTING=ON
-
-      - name: Run unit tests
-        id: run_tests
-        run: ctest --verbose --test-dir build --no-compress-output -T Test
+          run-test: true
+          test-args: --no-compress-output -T Test
 
       - name: Setup Testspace client
         id: setup_testspace
-        if: steps.run_tests.outcome == 'success' || steps.run_tests.outcome == 'failure'
+        if: steps.cmake_action.outcome == 'success' || steps.cmake_action.outcome == 'failure'
         uses: testspace-com/setup-testspace@v1.0.6
         with:
           domain: ${{github.repository_owner}}
@@ -32,7 +31,7 @@ jobs:
         run: testspace [Tests]"build/Testing/*/Test.xml"
 
       - name: Generate and send code coverage report to Coveralls
-        if: steps.run_tests.outcome == 'success' || steps.run_tests.outcome == 'failure'
+        if: steps.cmake_action.outcome == 'success' || steps.cmake_action.outcome == 'failure'
         uses: threeal/gcovr-action@v0.2.0
         with:
           gcov-executable: llvm-cov gcov
@@ -47,7 +46,7 @@ jobs:
         uses: actions/checkout@v3.3.0
 
       - name: Configure and build this project
-        uses: threeal/cmake-action@v1.0.0
+        uses: threeal/cmake-action@v1.1.0
         with:
           generator: Ninja
           cxx-flags: -Werror
@@ -59,10 +58,12 @@ jobs:
       - name: Checkout this repository
         uses: actions/checkout@v3.3.0
 
-      - name: Configure and build this project # TODO: use threeal/cmake-action
-        run: |
-          cmake . -B build -DCMAKE_CXX_COMPILER=cl -DCMAKE_CXX_FLAGS=/WX -DBUILD_TESTING=ON
-          cmake --build build
+      - name: Configure and build this project
+        uses: threeal/cmake-action@v1.1.0
+        with:
+          cxx-compiler: cl
+          cxx-flags: /WX
+          args: -DBUILD_TESTING=ON
 
   check-formatting:
     runs-on: ubuntu-latest
@@ -74,6 +75,6 @@ jobs:
         run: pip3 install cmake-format
 
       - name: Configure and check formatting
-        uses: threeal/cmake-action@v1.0.0
+        uses: threeal/cmake-action@v1.1.0
         with:
           targets: format check-format
