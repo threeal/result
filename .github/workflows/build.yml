@@ -1,0 +1,24 @@
+name: build
+on:
+  workflow_dispatch:
+  push:
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout this repository
+        uses: actions/checkout@v3.3.0
+
+      - name: Configure and build this project
+        uses: threeal/cmake-action@v1.1.0
+
+  release-msvc:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout this repository
+        uses: actions/checkout@v3.3.0
+
+      - name: Configure and build this project
+        uses: threeal/cmake-action@v1.1.0
+        with:
+          cxx-compiler: cl

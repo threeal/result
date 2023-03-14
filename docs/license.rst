@@ -1,6 +1,14 @@
-MIT License
+License
+=======
 
-Copyright (c) 2022 Alfi Maulana
+.. image:: https://opensource.org/wp-content/uploads/2022/10/osi-badge-dark.svg
+   :width: 150
+   :align: right
+   :target: https://opensource.org/licenses
+
+This project is licensed under the terms of the `MIT License`_.
+
+Copyright © 2022-2023 `Alfi Maulana`_
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +27,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+.. _Alfi Maulana: https://github.com/threeal
+.. _MIT License: https://opensource.org/licenses/MIT
