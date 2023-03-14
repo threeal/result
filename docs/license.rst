@@ -1,7 +1,7 @@
 License
 =======
 
-.. image:: https://opensource.org/files/OSIApproved_1.png
+.. image:: https://opensource.org/wp-content/uploads/2022/10/osi-badge-dark.svg
    :width: 150
    :align: right
    :target: https://opensource.org/licenses
