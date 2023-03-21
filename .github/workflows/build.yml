@@ -1,7 +1,9 @@
 name: build
 on:
   workflow_dispatch:
+  pull_request:
   push:
+    branches: [latest, main]
 jobs:
   release:
     runs-on: ubuntu-latest
