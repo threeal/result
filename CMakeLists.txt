@@ -20,7 +20,7 @@ if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
   if(BUILD_TESTING)
     enable_testing()
 
-    cpmaddpackage("gh:catchorg/Catch2@3.2.0")
+    cpmaddpackage("gh:catchorg/Catch2@3.3.2")
     include("${Catch2_SOURCE_DIR}/extras/Catch.cmake")
 
     if(NOT MSVC)
