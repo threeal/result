@@ -39,7 +39,7 @@ TEST_CASE("call `unwrap_err` on error result") {
 TEST_CASE("call `unwrap_err` on ok result") {
   const res::Result res = res::Ok();
   REQUIRE(res.is_ok());
-  REQUIRE_THROWS(res.unwrap_err());
+  REQUIRE_THROWS_AS(res.unwrap_err(), error::Error);
 }
 
 TEST_CASE("check rewriting result") {

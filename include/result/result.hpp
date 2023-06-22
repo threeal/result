@@ -1,7 +1,7 @@
 #pragma once
 
+#include <error/error.hpp>
 #include <optional>
-#include <stdexcept>
 
 #include "err.hpp"
 #include "ok.hpp"
@@ -81,7 +81,7 @@ class Result {
   /** Get the error data if the status is failed.
    * This function will throw an exception if the status is not failed.
    * @return The error data.
-   * @exception std::runtime_error The status is not failed.
+   * @exception error::Error The status is not failed.
    *
    * @code
    * res::Result result = res::Err("undefined error");
@@ -95,7 +95,7 @@ class Result {
    */
   const Err& unwrap_err() const {
     if (!err_opt.has_value())
-      throw std::runtime_error("unable to unwrap error of ok result");
+      throw error::Error("Unable to unwrap error of ok result");
     return err_opt.value();
   }
 };

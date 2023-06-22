@@ -29,7 +29,7 @@ TEST_CASE("call `unwrap` on ok result-of") {
 TEST_CASE("call `unwrap` on error result-of") {
   const res::ResultOf<int> res = res::Err("unknown error");
   REQUIRE(res.is_err());
-  REQUIRE_THROWS(res.unwrap());
+  REQUIRE_THROWS_AS(res.unwrap(), error::Error);
 }
 
 TEST_CASE("call `unwrap_err` on error result-of") {
@@ -50,7 +50,7 @@ TEST_CASE("call `unwrap_err` on error result-of") {
 TEST_CASE("call `unwrap_err` on ok result-of") {
   const res::ResultOf<int> res = 32;
   REQUIRE(res.is_ok());
-  REQUIRE_THROWS(res.unwrap_err());
+  REQUIRE_THROWS_AS(res.unwrap_err(), error::Error);
 }
 
 TEST_CASE("check rewriting result-of") {

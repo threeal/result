@@ -39,7 +39,7 @@ TEST_CASE("test code snippet") {
       }
       SECTION("2") {
         res::Result result = res::Ok();
-        REQUIRE_THROWS(result.unwrap_err());  // throws exception
+        REQUIRE_THROWS_AS(result.unwrap_err(), error::Error);
       }
     }
   }
@@ -93,7 +93,7 @@ TEST_CASE("test code snippet") {
       }
       SECTION("2") {
         res::ResultOf<int> result_of_int = res::Err("undefined error");
-        REQUIRE_THROWS(result_of_int.unwrap());  // throws exception
+        REQUIRE_THROWS_AS(result_of_int.unwrap(), error::Error);
       }
     }
     SECTION("unwrap_err() function") {
@@ -103,7 +103,7 @@ TEST_CASE("test code snippet") {
       }
       SECTION("2") {
         res::ResultOf<int> result_of_int = 32;
-        REQUIRE_THROWS(result_of_int.unwrap_err());  // throws exception
+        REQUIRE_THROWS_AS(result_of_int.unwrap_err(), error::Error);
       }
     }
   }

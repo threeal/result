@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stdexcept>
+#include <error/error.hpp>
 #include <variant>
 
 #include "err.hpp"
@@ -136,7 +136,7 @@ class ResultOf {
   /** Get the value data if the status is ok.
    * This function will throw an exception if the status is not ok.
    * @return The value data.
-   * @exception std::runtime_error The status is not ok.
+   * @exception error::Error The status is not ok.
    *
    * @code
    * res::ResultOf<int> result_of_int = 32;
@@ -150,14 +150,14 @@ class ResultOf {
    */
   const T& unwrap() const {
     if (data_is_err)
-      throw std::runtime_error("unable to unwrap content of error result-of");
+      throw error::Error("Unable to unwrap content of error result-of");
     return std::get<T>(data);
   }
 
   /** Get the error data if the status is failed.
    * This function will throw an exception if the status is not failed.
    * @return The error data.
-   * @exception std::runtime_error The status is not failed.
+   * @exception error::Error The status is not failed.
    *
    * @code
    * res::ResultOf<int> result_of_int = res::Err("undefined error");
@@ -171,7 +171,7 @@ class ResultOf {
    */
   const Err& unwrap_err() const {
     if (!data_is_err)
-      throw std::runtime_error("unable to unwrap error of ok result-of");
+      throw error::Error("Unable to unwrap error of ok result-of");
     return std::get<Err>(data);
   }
 };

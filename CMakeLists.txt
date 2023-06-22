@@ -20,6 +20,7 @@ cpmaddpackage(
 
 add_library(result INTERFACE)
 target_include_directories(result INTERFACE include)
+target_link_libraries(result INTERFACE error)
 
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
   cpmaddpackage("gh:TheLartians/Format.cmake@1.7.3")
