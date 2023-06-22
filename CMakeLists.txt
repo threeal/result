@@ -10,11 +10,18 @@ else()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wnon-virtual-dtor -Wpedantic")
 endif()
 
+include(cmake/CPM.cmake)
+
+cpmaddpackage(
+  NAME error
+  GIT_TAG 3b10c64
+  GITHUB_REPOSITORY threeal/cpp
+  SOURCE_SUBDIR error)
+
 add_library(result INTERFACE)
 target_include_directories(result INTERFACE include)
 
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
-  include(cmake/CPM.cmake)
   cpmaddpackage("gh:TheLartians/Format.cmake@1.7.3")
 
   if(BUILD_TESTING)
