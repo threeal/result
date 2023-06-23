@@ -33,7 +33,7 @@ TEST_CASE("call `unwrap` on error result-of") {
 }
 
 TEST_CASE("call `unwrap_err` on error result-of") {
-  res::Result res;
+  res::ResultOf<int> res;
   std::string err_msg;
   SECTION("from string") {
     res = res::Err("unknown error");
@@ -121,7 +121,7 @@ TEST_CASE("cast result-of into result") {
   SECTION("from error result-of") {
     res::Result res = src = res::Err("unknown error");
     CHECK(res.is_err());
-    if (res.is_err()) CHECK(res.unwrap_err() == src.unwrap_err());
+    if (res.is_err()) CHECK(res.unwrap_err().message == src.unwrap_err());
   }
 }
 

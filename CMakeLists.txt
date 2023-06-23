@@ -14,7 +14,7 @@ include(cmake/CPM.cmake)
 
 cpmaddpackage(
   NAME error
-  GIT_TAG 3b10c64
+  GIT_TAG fd02f4c
   GITHUB_REPOSITORY threeal/cpp
   SOURCE_SUBDIR error)
 

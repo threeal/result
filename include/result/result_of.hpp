@@ -101,7 +101,7 @@ class ResultOf {
    * @endcode
    */
   operator Result() const {
-    if (data_is_err) return std::get<Err>(data);
+    if (data_is_err) return error::Error(std::get<Err>(data));
     return Ok();
   }
 

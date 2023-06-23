@@ -10,7 +10,7 @@ namespace res {
  * dynamically.
  *
  * @code
- * res::Result result = res::ErrStream() << 404 << " not found";
+ * res::ResultOf<int> result = res::ErrStream() << 404 << " not found";
  * assert(result.is_err());
  * assert(result.unwrap_err() == "404 not found");
  * @endcode
@@ -18,13 +18,8 @@ namespace res {
 struct ErrStream : public std::stringstream {};
 
 /** A type that represents an error status (failure).
- * Use this type on res::Result or res::ResultOf to set the status of that data
+ * Use this type on res::ResultOf to set the status of that data
  * to be failed.
- *
- * @code
- * res::Result result = res::Err("undefined error");
- * assert(result.is_err());
- * @endcode
  *
  * @code
  * res::ResultOf<int> result_of_int = res::Err("undefined error");

@@ -17,14 +17,14 @@ namespace res {
  * res::Result result = res::Ok();
  * assert(result.is_ok());
  *
- * result = res::Err("undefined error");
+ * result = error::Error("undefined error");
  * assert(result.is_err());
- * assert(result.unwrap_err() == "undefined error");
+ * assert(result.unwrap_err().message == "undefined error");
  * @endcode
  */
 class Result {
  private:
-  std::optional<Err> err_opt;
+  std::optional<error::Error> err_opt;
 
  public:
   /** Construct a new empty result.
@@ -35,7 +35,7 @@ class Result {
    * assert(result.is_err());
    * @endcode
    */
-  Result() : Result(Err("result is uninitialized")) {}
+  Result() : Result(error::Error("result is uninitialized")) {}
 
   /** Construct a new ok result (success).
    * @param ok The ok status.
@@ -51,22 +51,11 @@ class Result {
    * @param err The error status.
    *
    * @code
-   * res::Result result = res::Err("undefined error");
+   * res::Result result = error::Error("undefined error");
    * assert(result.is_err());
    * @endcode
    */
-  Result(const Err& err) : err_opt(err) {}
-
-  /** Construct a new error result (failure) using an error stream.
-   * @param err_stream The error stream.
-   *
-   * @code
-   * res::Result result = res::ErrStream() << 404 << " not found";
-   * assert(result.is_err());
-   * assert(result.unwrap_err() == "404 not found");
-   * @endcode
-   */
-  Result(const ErrStream& err_stream) : err_opt(err_stream.str()) {}
+  Result(const error::Error& err) : err_opt(err) {}
 
   /** Check if the status is ok.
    * @return `true` if the status is ok.
@@ -84,8 +73,8 @@ class Result {
    * @exception error::Error The status is not failed.
    *
    * @code
-   * res::Result result = res::Err("undefined error");
-   * assert(result.unwrap_err() == "undefined error");
+   * res::Result result = error::Error("undefined error");
+   * assert(result.unwrap_err().message == "undefined error");
    * @endcode
    *
    * @code{.cpp}
@@ -93,7 +82,7 @@ class Result {
    * result.unwrap_err();  // throws exception
    * @endcode
    */
-  const Err& unwrap_err() const {
+  const error::Error& unwrap_err() const {
     if (!err_opt.has_value())
       throw error::Error("Unable to unwrap error of ok result");
     return err_opt.value();
