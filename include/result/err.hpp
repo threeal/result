@@ -8,24 +8,10 @@ namespace res {
 /** A helper struct for composing an error message using stream operation.
  * Use this struct to replace res::Err for generating an error message
  * dynamically.
- *
- * @code
- * res::ResultOf<int> result = res::ErrStream() << 404 << " not found";
- * assert(result.is_err());
- * assert(result.unwrap_err() == "404 not found");
- * @endcode
  */
 struct ErrStream : public std::stringstream {};
 
-/** A type that represents an error status (failure).
- * Use this type on res::ResultOf to set the status of that data
- * to be failed.
- *
- * @code
- * res::ResultOf<int> result_of_int = res::Err("undefined error");
- * assert(result_of_int.is_err());
- * @endcode
- */
+/** A type that represents an error status (failure). */
 struct Err : public std::string {
   /** Construct a new error data using a C++ string.
    * @param err_msg The error message.

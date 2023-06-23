@@ -3,7 +3,6 @@
 #include <error/error.hpp>
 #include <variant>
 
-#include "err.hpp"
 #include "result.hpp"
 
 namespace res {
@@ -20,15 +19,15 @@ namespace res {
  * assert(result_of_int.is_ok());
  * assert(result_of_int.unwrap() == 32);
  *
- * result_of_int = res::Err("undefined error");
+ * result_of_int = error::Error("undefined error");
  * assert(result_of_int.is_err());
- * assert(result_of_int.unwrap_err() == "undefined error");
+ * assert(result_of_int.unwrap_err().message == "undefined error");
  * @endcode
  */
 template <typename T>
 class ResultOf {
  private:
-  std::variant<T, Err> data;
+  std::variant<T, error::Error> data;
   bool data_is_err;
 
  public:
@@ -40,7 +39,7 @@ class ResultOf {
    * assert(result_of_int.is_err());
    * @endcode
    */
-  ResultOf() : ResultOf(Err("result-of is uninitialized")) {}
+  ResultOf() : ResultOf(error::Error("result-of is uninitialized")) {}
 
   /** Construct a new ok result-of (success) that contains a value.
    * @param val The value.
@@ -56,23 +55,11 @@ class ResultOf {
    * @param err The error status.
    *
    * @code
-   * res::ResultOf<int> result_of_int = res::Err("undefined error");
+   * res::ResultOf<int> result_of_int = error::Error("undefined error");
    * assert(result_of_int.is_err());
    * @endcode
    */
-  ResultOf(const Err& err) : data(err), data_is_err(true) {}
-
-  /** Construct a new error result-of (failure) using an error stream.
-   * @param err_stream The error stream.
-   *
-   * @code
-   * res::ResultOf<int> result_of_int = res::ErrStream() << 404 << " not found";
-   * assert(result_of_int.is_err());
-   * assert(result_of_int.unwrap_err() == "404 not found");
-   * @endcode
-   */
-  ResultOf(const ErrStream& err_stream)
-      : data(err_stream.str()), data_is_err(true) {}
+  ResultOf(const error::Error& err) : data(err), data_is_err(true) {}
 
   /** Explicitly convert into another result-of with a different value type.
    * If the status is ok, the value data will be cast into the target value
@@ -87,7 +74,7 @@ class ResultOf {
    */
   template <typename U>
   explicit operator ResultOf<U>() const {
-    if (data_is_err) return std::get<Err>(data);
+    if (data_is_err) return std::get<error::Error>(data);
     return static_cast<U>(std::get<T>(data));
   }
 
@@ -101,7 +88,7 @@ class ResultOf {
    * @endcode
    */
   operator Result() const {
-    if (data_is_err) return error::Error(std::get<Err>(data));
+    if (data_is_err) return std::get<error::Error>(data);
     return Ok();
   }
 
@@ -119,7 +106,7 @@ class ResultOf {
    */
   template <typename U>
   ResultOf<U> as() const {
-    if (data_is_err) return std::get<Err>(data);
+    if (data_is_err) return std::get<error::Error>(data);
     return static_cast<U>(std::get<T>(data));
   }
 
@@ -144,7 +131,7 @@ class ResultOf {
    * @endcode
    *
    * @code{.cpp}
-   * res::ResultOf<int> result_of_int = res::Err("undefined error");
+   * res::ResultOf<int> result_of_int = error::Error("undefined error");
    * result_of_int.unwrap();  // throws exception
    * @endcode
    */
@@ -160,8 +147,8 @@ class ResultOf {
    * @exception error::Error The status is not failed.
    *
    * @code
-   * res::ResultOf<int> result_of_int = res::Err("undefined error");
-   * assert(result_of_int.unwrap_err() == "undefined error");
+   * res::ResultOf<int> result_of_int = error::Error("undefined error");
+   * assert(result_of_int.unwrap_err().message == "undefined error");
    * @endcode
    *
    * @code{.cpp}
@@ -169,10 +156,10 @@ class ResultOf {
    * result_of_int.unwrap_err();  // throws exception
    * @endcode
    */
-  const Err& unwrap_err() const {
+  const error::Error& unwrap_err() const {
     if (!data_is_err)
       throw error::Error("Unable to unwrap error of ok result-of");
-    return std::get<Err>(data);
+    return std::get<error::Error>(data);
   }
 };
 }  // namespace res
