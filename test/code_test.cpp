@@ -100,18 +100,4 @@ TEST_CASE("test code snippet") {
     res::Result result = res::Ok();
     assert(result.is_ok());
   }
-  SECTION("res::Err struct") {
-    SECTION("Err(const std::string&) constructor") {
-      res::Err err = std::string("undefined error");
-      assert(err == "undefined error");
-    }
-    SECTION("Err(const char*) constructor") {
-      res::Err err = "unknown error";
-      assert(err == "unknown error");
-    }
-    SECTION("Err(const ErrStream&) constructor") {
-      res::Err err = res::ErrStream() << 404 << " not found";
-      assert(err == "404 not found");
-    }
-  }
 }

@@ -3,7 +3,6 @@
 #include <error/error.hpp>
 #include <optional>
 
-#include "err.hpp"
 #include "ok.hpp"
 
 namespace res {
