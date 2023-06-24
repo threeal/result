@@ -8,9 +8,7 @@ TEST_CASE("check ok result-of") {
 }
 
 TEST_CASE("check error result-of") {
-  res::ResultOf<int> res;
-  SECTION("from string") { res = res::Err("unknown error"); }
-  SECTION("from stream") { res = res::ErrStream() << "unknown error: " << 500; }
+  const res::ResultOf<int> res = error::Error("unknown error");
   REQUIRE(res.is_err());
   REQUIRE_FALSE(res.is_ok());
 }
@@ -27,44 +25,33 @@ TEST_CASE("call `unwrap` on ok result-of") {
 }
 
 TEST_CASE("call `unwrap` on error result-of") {
-  const res::ResultOf<int> res = res::Err("unknown error");
+  const res::ResultOf<int> res = error::Error("unknown error");
   REQUIRE(res.is_err());
-  REQUIRE_THROWS(res.unwrap());
+  REQUIRE_THROWS_AS(res.unwrap(), error::Error);
 }
 
 TEST_CASE("call `unwrap_err` on error result-of") {
-  res::Result res;
-  std::string err_msg;
-  SECTION("from string") {
-    res = res::Err("unknown error");
-    err_msg = "unknown error";
-  }
-  SECTION("from stream") {
-    res = res::ErrStream() << "unknown error: " << 500;
-    err_msg = "unknown error: 500";
-  }
+  const res::ResultOf<int> res = error::Error("unknown error");
   REQUIRE(res.is_err());
-  REQUIRE(res.unwrap_err() == err_msg);
+  REQUIRE(res.unwrap_err().message == "unknown error");
 }
 
 TEST_CASE("call `unwrap_err` on ok result-of") {
   const res::ResultOf<int> res = 32;
   REQUIRE(res.is_ok());
-  REQUIRE_THROWS(res.unwrap_err());
+  REQUIRE_THROWS_AS(res.unwrap_err(), error::Error);
 }
 
 TEST_CASE("check rewriting result-of") {
   res::ResultOf<int> res = 32;
   REQUIRE(res.is_ok());
   REQUIRE(res.unwrap() == 32);
-  std::string err_msg = "unknown error";
-  res = res::Err(err_msg);
+  res = error::Error("unknown error");
   REQUIRE(res.is_err());
-  REQUIRE(res.unwrap_err() == err_msg);
-  err_msg = "other error";
-  res = res::Err(err_msg);
+  REQUIRE(res.unwrap_err().message == "unknown error");
+  res = error::Error("other error");
   REQUIRE(res.is_err());
-  REQUIRE(res.unwrap_err() == err_msg);
+  REQUIRE(res.unwrap_err().message == "other error");
   res = 32;
   REQUIRE(res.is_ok());
   REQUIRE(res.unwrap() == 32);
@@ -76,7 +63,7 @@ TEST_CASE("check rewriting result-of") {
 namespace {
 res::ResultOf<int> foo(bool is_ok) {
   if (is_ok) return 32;
-  return res::Err("unknown error");
+  return error::Error("unknown error");
 }
 }  // namespace
 
@@ -104,12 +91,12 @@ TEST_CASE("check if ok result-of is preserved outside the scope") {
 TEST_CASE("check if error result-of is preserved outside the scope") {
   res::ResultOf<int> res;
   {
-    res = res::Err("unknown error");
+    res = error::Error("unknown error");
     REQUIRE(res.is_err());
-    REQUIRE(res.unwrap_err() == std::string("unknown error"));
+    REQUIRE(res.unwrap_err().message == "unknown error");
   }
   REQUIRE(res.is_err());
-  REQUIRE(res.unwrap_err() == std::string("unknown error"));
+  REQUIRE(res.unwrap_err().message == "unknown error");
 }
 
 TEST_CASE("cast result-of into result") {
@@ -119,7 +106,7 @@ TEST_CASE("cast result-of into result") {
     CHECK(res.is_ok());
   }
   SECTION("from error result-of") {
-    res::Result res = src = res::Err("unknown error");
+    res::Result res = src = error::Error("unknown error");
     CHECK(res.is_err());
     if (res.is_err()) CHECK(res.unwrap_err() == src.unwrap_err());
   }
@@ -144,7 +131,7 @@ TEST_CASE("cast result-of into other result-of with different type") {
     if (res.is_ok()) CHECK(res.unwrap() == src.unwrap().data);
   }
   SECTION("from error result-of") {
-    res::ResultOf<Int> src = res::Err("unknown error");
+    res::ResultOf<Int> src = error::Error("unknown error");
     SECTION("using `as()` function") { res = src.as<int>(); }
     SECTION("using explicit cast") {
       res = static_cast<res::ResultOf<int>>(src);

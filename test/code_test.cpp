@@ -11,9 +11,9 @@ TEST_CASE("test code snippet") {
       res::Result result = res::Ok();
       assert(result.is_ok());
 
-      result = res::Err("undefined error");
+      result = error::Error("undefined error");
       assert(result.is_err());
-      assert(result.unwrap_err() == "undefined error");
+      assert(result.unwrap_err().message == "undefined error");
     }
     SECTION("Result() constructor") {
       res::Result result;
@@ -23,23 +23,18 @@ TEST_CASE("test code snippet") {
       res::Result result = res::Ok();
       assert(result.is_ok());
     }
-    SECTION("Result(const Err&) constructor") {
-      res::Result result = res::Err("undefined error");
+    SECTION("Result(const error::Error&) constructor") {
+      res::Result result = error::Error("undefined error");
       assert(result.is_err());
-    }
-    SECTION("Result(const ErrStream&) constructor") {
-      res::Result result = res::ErrStream() << 404 << " not found";
-      assert(result.is_err());
-      assert(result.unwrap_err() == "404 not found");
     }
     SECTION("unwrap_err() function") {
       SECTION("1") {
-        res::Result result = res::Err("undefined error");
-        assert(result.unwrap_err() == "undefined error");
+        res::Result result = error::Error("undefined error");
+        assert(result.unwrap_err().message == "undefined error");
       }
       SECTION("2") {
         res::Result result = res::Ok();
-        REQUIRE_THROWS(result.unwrap_err());  // throws exception
+        REQUIRE_THROWS_AS(result.unwrap_err(), error::Error);
       }
     }
   }
@@ -49,9 +44,9 @@ TEST_CASE("test code snippet") {
       assert(result_of_int.is_ok());
       assert(result_of_int.unwrap() == 32);
 
-      result_of_int = res::Err("undefined error");
+      result_of_int = error::Error("undefined error");
       assert(result_of_int.is_err());
-      assert(result_of_int.unwrap_err() == "undefined error");
+      assert(result_of_int.unwrap_err().message == "undefined error");
     }
     SECTION("ResultOf() constructor") {
       res::ResultOf<int> result_of_int;
@@ -62,14 +57,8 @@ TEST_CASE("test code snippet") {
       assert(result_of_int.is_ok());
     }
     SECTION("ResultOf(const Err&) constructor") {
-      res::ResultOf<int> result_of_int = res::Err("undefined error");
+      res::ResultOf<int> result_of_int = error::Error("undefined error");
       assert(result_of_int.is_err());
-    }
-    SECTION("ResultOf(const ErrStream&) constructor") {
-      res::ResultOf<int> result_of_int =  //
-          res::ErrStream() << 404 << " not found";
-      assert(result_of_int.is_err());
-      assert(result_of_int.unwrap_err() == "404 not found");
     }
     SECTION("operator ResultOf<U>() function") {
       res::ResultOf<int> result_of_int = 32;
@@ -92,48 +81,23 @@ TEST_CASE("test code snippet") {
         assert(result_of_int.unwrap() == 32);
       }
       SECTION("2") {
-        res::ResultOf<int> result_of_int = res::Err("undefined error");
-        REQUIRE_THROWS(result_of_int.unwrap());  // throws exception
+        res::ResultOf<int> result_of_int = error::Error("undefined error");
+        REQUIRE_THROWS_AS(result_of_int.unwrap(), error::Error);
       }
     }
     SECTION("unwrap_err() function") {
       SECTION("1") {
-        res::ResultOf<int> result_of_int = res::Err("undefined error");
-        assert(result_of_int.unwrap_err() == "undefined error");
+        res::ResultOf<int> result_of_int = error::Error("undefined error");
+        assert(result_of_int.unwrap_err().message == "undefined error");
       }
       SECTION("2") {
         res::ResultOf<int> result_of_int = 32;
-        REQUIRE_THROWS(result_of_int.unwrap_err());  // throws exception
+        REQUIRE_THROWS_AS(result_of_int.unwrap_err(), error::Error);
       }
     }
   }
   SECTION("res::Ok struct") {
     res::Result result = res::Ok();
     assert(result.is_ok());
-  }
-  SECTION("res::Err struct") {
-    SECTION("res::Err struct") {
-      res::Result result = res::Err("undefined error");
-      assert(result.is_err());
-      res::ResultOf<int> result_of_int = res::Err("undefined error");
-      assert(result_of_int.is_err());
-    }
-    SECTION("Err(const std::string&) constructor") {
-      res::Err err = std::string("undefined error");
-      assert(err == "undefined error");
-    }
-    SECTION("Err(const char*) constructor") {
-      res::Err err = "unknown error";
-      assert(err == "unknown error");
-    }
-    SECTION("Err(const ErrStream&) constructor") {
-      res::Err err = res::ErrStream() << 404 << " not found";
-      assert(err == "404 not found");
-    }
-  }
-  SECTION("res::ErrStream struct") {
-    res::Result result = res::ErrStream() << 404 << " not found";
-    assert(result.is_err());
-    assert(result.unwrap_err() == "404 not found");
   }
 }

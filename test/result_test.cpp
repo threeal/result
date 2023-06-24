@@ -9,9 +9,7 @@ TEST_CASE("check ok result") {
 }
 
 TEST_CASE("check error result") {
-  res::Result res;
-  SECTION("from string") { res = res::Err("unknown error"); }
-  SECTION("from stream") { res = res::ErrStream() << "unknown error: " << 500; }
+  const res::Result res = error::Error("unknown error");
   REQUIRE(res.is_err());
   REQUIRE_FALSE(res.is_ok());
 }
@@ -22,37 +20,26 @@ TEST_CASE("uninitialized result contains error") {
 }
 
 TEST_CASE("call `unwrap_err` on error result") {
-  res::Result res;
-  std::string err_msg;
-  SECTION("from string") {
-    res = res::Err("unknown error");
-    err_msg = "unknown error";
-  }
-  SECTION("from stream") {
-    res = res::ErrStream() << "unknown error: " << 500;
-    err_msg = "unknown error: 500";
-  }
+  const res::Result res = error::Error("unknown error");
   REQUIRE(res.is_err());
-  REQUIRE(res.unwrap_err() == err_msg);
+  REQUIRE(res.unwrap_err().message == "unknown error");
 }
 
 TEST_CASE("call `unwrap_err` on ok result") {
   const res::Result res = res::Ok();
   REQUIRE(res.is_ok());
-  REQUIRE_THROWS(res.unwrap_err());
+  REQUIRE_THROWS_AS(res.unwrap_err(), error::Error);
 }
 
 TEST_CASE("check rewriting result") {
   res::Result res = res::Ok();
   REQUIRE(res.is_ok());
-  std::string err_msg = "unknown error";
-  res = res::Err(err_msg);
+  res = error::Error("unknown error");
   REQUIRE(res.is_err());
-  REQUIRE(res.unwrap_err() == err_msg);
-  err_msg = "other error";
-  res = res::Err(err_msg);
+  REQUIRE(res.unwrap_err().message == "unknown error");
+  res = error::Error("other error");
   REQUIRE(res.is_err());
-  REQUIRE(res.unwrap_err() == err_msg);
+  REQUIRE(res.unwrap_err().message == "other error");
   res = res::Ok();
   REQUIRE(res.is_ok());
 }
@@ -60,7 +47,7 @@ TEST_CASE("check rewriting result") {
 namespace {
 res::Result foo(bool is_ok) {
   if (is_ok) return res::Ok();
-  return res::Err("unknown error");
+  return error::Error("unknown error");
 }
 }  // namespace
 
@@ -84,13 +71,12 @@ TEST_CASE("check if ok result is preserved outside the scope") {
 }
 
 TEST_CASE("check if error result is preserved outside the scope") {
-  const std::string err_msg = "unknown error";
   res::Result res;
   {
-    res = res::Err(err_msg);
+    res = error::Error("unknown error");
     REQUIRE(res.is_err());
-    REQUIRE(res.unwrap_err() == err_msg);
+    REQUIRE(res.unwrap_err().message == "unknown error");
   }
   REQUIRE(res.is_err());
-  REQUIRE(res.unwrap_err() == err_msg);
+  REQUIRE(res.unwrap_err().message == "unknown error");
 }
