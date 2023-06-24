@@ -108,8 +108,7 @@ TEST_CASE("cast result-of into result") {
   SECTION("from error result-of") {
     res::Result res = src = error::Error("unknown error");
     CHECK(res.is_err());
-    if (res.is_err())
-      CHECK(res.unwrap_err().message == src.unwrap_err().message);
+    if (res.is_err()) CHECK(res.unwrap_err() == src.unwrap_err());
   }
 }
 
@@ -138,7 +137,6 @@ TEST_CASE("cast result-of into other result-of with different type") {
       res = static_cast<res::ResultOf<int>>(src);
     }
     CHECK(res.is_err());
-    if (res.is_err())
-      CHECK(res.unwrap_err().message == src.unwrap_err().message);
+    if (res.is_err()) CHECK(res.unwrap_err() == src.unwrap_err());
   }
 }
