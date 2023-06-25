@@ -15,28 +15,6 @@ TEST_CASE("test code snippet") {
       assert(result.is_err());
       assert(result.unwrap_err().message == "undefined error");
     }
-    SECTION("Result() constructor") {
-      res::Result result;
-      assert(result.is_err());
-    }
-    SECTION("Result(const Ok&) constructor") {
-      res::Result result = res::Ok();
-      assert(result.is_ok());
-    }
-    SECTION("Result(const error::Error&) constructor") {
-      res::Result result = error::Error("undefined error");
-      assert(result.is_err());
-    }
-    SECTION("unwrap_err() function") {
-      SECTION("1") {
-        res::Result result = error::Error("undefined error");
-        assert(result.unwrap_err().message == "undefined error");
-      }
-      SECTION("2") {
-        res::Result result = res::Ok();
-        REQUIRE_THROWS_AS(result.unwrap_err(), error::Error);
-      }
-    }
   }
   SECTION("res::ResultOf struct") {
     SECTION("res::ResultOf struct") {
@@ -64,11 +42,6 @@ TEST_CASE("test code snippet") {
       res::ResultOf<int> result_of_int = 32;
       auto result_of_float = static_cast<res::ResultOf<float>>(result_of_int);
       assert(result_of_float.unwrap() == 32);
-    }
-    SECTION("operator Result() function") {
-      res::ResultOf<int> result_of_int = 32;
-      res::Result result = result_of_int;
-      assert(result.is_ok());
     }
     SECTION("ResultOf<U> as<U>() function") {
       res::ResultOf<int> result_of_int = 32;

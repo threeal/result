@@ -3,8 +3,6 @@
 #include <error/error.hpp>
 #include <variant>
 
-#include "result.hpp"
-
 namespace res {
 
 /** A type used for returning and propagating a value or an error.
@@ -76,20 +74,6 @@ class ResultOf {
   explicit operator ResultOf<U>() const {
     if (data_is_err) return std::get<error::Error>(data);
     return static_cast<U>(std::get<T>(data));
-  }
-
-  /** Implicitly Convert into a result.
-   * If the status is ok, the value data won't be stored in the new result.
-   *
-   * @code
-   * res::ResultOf<int> result_of_int = 32;
-   * res::Result result = result_of_int;
-   * assert(result.is_ok());
-   * @endcode
-   */
-  operator Result() const {
-    if (data_is_err) return std::get<error::Error>(data);
-    return Ok();
   }
 
   /** Convert into another result-of with a different value type.

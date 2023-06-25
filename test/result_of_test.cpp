@@ -99,19 +99,6 @@ TEST_CASE("check if error result-of is preserved outside the scope") {
   REQUIRE(res.unwrap_err().message == "unknown error");
 }
 
-TEST_CASE("cast result-of into result") {
-  res::ResultOf<int> src;
-  SECTION("from ok result-of") {
-    res::Result res = src = 32;
-    CHECK(res.is_ok());
-  }
-  SECTION("from error result-of") {
-    res::Result res = src = error::Error("unknown error");
-    CHECK(res.is_err());
-    if (res.is_err()) CHECK(res.unwrap_err() == src.unwrap_err());
-  }
-}
-
 namespace {
 struct Int {
   int data;
