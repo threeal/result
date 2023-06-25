@@ -5,7 +5,7 @@
 
 #include "ok.hpp"
 
-namespace res {
+namespace result {
 
 /** A type used for returning and propagating a value or an error.
  * This type could either have an ok status (success) which contains a value or
@@ -14,13 +14,13 @@ namespace res {
  * @tparam T The type of the value.
  *
  * @code
- * res::Result<int> result_of_int = 32;
- * assert(result_of_int.is_ok());
- * assert(result_of_int.unwrap() == 32);
+ * result::Result<int> res = 32;
+ * assert(res.is_ok());
+ * assert(res.unwrap() == 32);
  *
- * result_of_int = error::Error("undefined error");
- * assert(result_of_int.is_err());
- * assert(result_of_int.unwrap_err().message == "undefined error");
+ * res = error::Error("undefined error");
+ * assert(res.is_err());
+ * assert(res.unwrap_err().message == "undefined error");
  * @endcode
  */
 template <typename T = Ok>
@@ -34,8 +34,8 @@ class Result {
    * Defaults to contain an error.
    *
    * @code
-   * res::Result<int> result_of_int;
-   * assert(result_of_int.is_err());
+   * result::Result<int> res;
+   * assert(res.is_err());
    * @endcode
    */
   Result() : Result(error::Error("result-of is uninitialized")) {}
@@ -44,8 +44,8 @@ class Result {
    * @param val The value.
    *
    * @code
-   * res::Result<int> result_of_int = 32;
-   * assert(result_of_int.is_ok());
+   * result::Result<int> res = 32;
+   * assert(res.is_ok());
    * @endcode
    */
   Result(const T& val) : data(val), data_is_err(false) {}
@@ -54,21 +54,21 @@ class Result {
    * @param err The error status.
    *
    * @code
-   * res::Result<int> result_of_int = error::Error("undefined error");
-   * assert(result_of_int.is_err());
+   * result::Result<int> res = error::Error("undefined error");
+   * assert(res.is_err());
    * @endcode
    */
   Result(const error::Error& err) : data(err), data_is_err(true) {}
 
   /** Explicitly convert into another result-of with a different value type.
    * If the status is ok, the value data will be cast into the target value
-   * type. See res::Result::as.
+   * type. See result::Result::as.
    * @tparam U the target value type.
    *
    * @code
-   * res::Result<int> result_of_int = 32;
-   * auto result_of_float = static_cast<res::Result<float>>(result_of_int);
-   * assert(result_of_float.unwrap() == 32);
+   * result::Result<int> int_res = 32;
+   * auto float_res = static_cast<result::Result<float>>(int_res);
+   * assert(float_res.unwrap() == 32);
    * @endcode
    */
   template <typename U>
@@ -84,9 +84,9 @@ class Result {
    * @return The converted result-of.
    *
    * @code
-   * res::Result<int> result_of_int = 32;
-   * res::Result<float> result_of_float = result_of_int.as<float>();
-   * assert(result_of_float.unwrap() == 32);
+   * result::Result<int> int_res = 32;
+   * result::Result<float> float_res = int_res.as<float>();
+   * assert(float_res.unwrap() == 32);
    * @endcode
    */
   template <typename U>
@@ -111,13 +111,13 @@ class Result {
    * @exception error::Error The status is not ok.
    *
    * @code
-   * res::Result<int> result_of_int = 32;
-   * assert(result_of_int.unwrap() == 32);
+   * result::Result<int> res = 32;
+   * assert(res.unwrap() == 32);
    * @endcode
    *
    * @code{.cpp}
-   * res::Result<int> result_of_int = error::Error("undefined error");
-   * result_of_int.unwrap();  // throws exception
+   * result::Result<int> res = error::Error("undefined error");
+   * res.unwrap();  // throws exception
    * @endcode
    */
   const T& unwrap() const {
@@ -132,13 +132,13 @@ class Result {
    * @exception error::Error The status is not failed.
    *
    * @code
-   * res::Result<int> result_of_int = error::Error("undefined error");
-   * assert(result_of_int.unwrap_err().message == "undefined error");
+   * result::Result<int> res = error::Error("undefined error");
+   * assert(res.unwrap_err().message == "undefined error");
    * @endcode
    *
    * @code{.cpp}
-   * res::Result<int> result_of_int = 32;
-   * result_of_int.unwrap_err();  // throws exception
+   * result::Result<int> res = 32;
+   * res.unwrap_err();  // throws exception
    * @endcode
    */
   const error::Error& unwrap_err() const {
@@ -147,4 +147,4 @@ class Result {
     return std::get<error::Error>(data);
   }
 };
-}  // namespace res
+}  // namespace result

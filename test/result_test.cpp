@@ -2,48 +2,48 @@
 #include <result/result.hpp>
 
 TEST_CASE("check ok result") {
-  const res::Result<int> res = 32;
+  const result::Result<int> res = 32;
   REQUIRE(res.is_ok());
   REQUIRE_FALSE(res.is_err());
 }
 
 TEST_CASE("check error result") {
-  const res::Result<int> res = error::Error("unknown error");
+  const result::Result<int> res = error::Error("unknown error");
   REQUIRE(res.is_err());
   REQUIRE_FALSE(res.is_ok());
 }
 
 TEST_CASE("uninitialized result contains error") {
-  const res::Result<int> res;
+  const result::Result<int> res;
   REQUIRE(res.is_err());
 }
 
 TEST_CASE("call `unwrap` on ok result") {
-  const res::Result<int> res = 32;
+  const result::Result<int> res = 32;
   REQUIRE(res.is_ok());
   REQUIRE(res.unwrap() == 32);
 }
 
 TEST_CASE("call `unwrap` on error result") {
-  const res::Result<int> res = error::Error("unknown error");
+  const result::Result<int> res = error::Error("unknown error");
   REQUIRE(res.is_err());
   REQUIRE_THROWS_AS(res.unwrap(), error::Error);
 }
 
 TEST_CASE("call `unwrap_err` on error result") {
-  const res::Result<int> res = error::Error("unknown error");
+  const result::Result<int> res = error::Error("unknown error");
   REQUIRE(res.is_err());
   REQUIRE(res.unwrap_err().message == "unknown error");
 }
 
 TEST_CASE("call `unwrap_err` on ok result") {
-  const res::Result<int> res = 32;
+  const result::Result<int> res = 32;
   REQUIRE(res.is_ok());
   REQUIRE_THROWS_AS(res.unwrap_err(), error::Error);
 }
 
 TEST_CASE("check rewriting result") {
-  res::Result<int> res = 32;
+  result::Result<int> res = 32;
   REQUIRE(res.is_ok());
   REQUIRE(res.unwrap() == 32);
   res = error::Error("unknown error");
@@ -61,7 +61,7 @@ TEST_CASE("check rewriting result") {
 }
 
 namespace {
-res::Result<int> foo(bool is_ok) {
+result::Result<int> foo(bool is_ok) {
   if (is_ok) return 32;
   return error::Error("unknown error");
 }
@@ -78,7 +78,7 @@ TEST_CASE("get result from function returning error") {
 }
 
 TEST_CASE("check if ok result is preserved outside the scope") {
-  res::Result<int> res;
+  result::Result<int> res;
   {
     res = 32;
     REQUIRE(res.is_ok());
@@ -89,7 +89,7 @@ TEST_CASE("check if ok result is preserved outside the scope") {
 }
 
 TEST_CASE("check if error result is preserved outside the scope") {
-  res::Result<int> res;
+  result::Result<int> res;
   {
     res = error::Error("unknown error");
     REQUIRE(res.is_err());
@@ -107,18 +107,22 @@ struct Int {
 }  // namespace
 
 TEST_CASE("cast result into other result with different type") {
-  res::Result<int> res;
+  result::Result<int> res;
   SECTION("from ok result") {
-    res::Result<Int> src = Int{32};
+    result::Result<Int> src = Int{32};
     SECTION("using `as()` function") { res = src.as<int>(); }
-    SECTION("using explicit cast") { res = static_cast<res::Result<int>>(src); }
+    SECTION("using explicit cast") {
+      res = static_cast<result::Result<int>>(src);
+    }
     CHECK(res.is_ok());
     if (res.is_ok()) CHECK(res.unwrap() == src.unwrap().data);
   }
   SECTION("from error result") {
-    res::Result<Int> src = error::Error("unknown error");
+    result::Result<Int> src = error::Error("unknown error");
     SECTION("using `as()` function") { res = src.as<int>(); }
-    SECTION("using explicit cast") { res = static_cast<res::Result<int>>(src); }
+    SECTION("using explicit cast") {
+      res = static_cast<result::Result<int>>(src);
+    }
     CHECK(res.is_err());
     if (res.is_err()) CHECK(res.unwrap_err() == src.unwrap_err());
   }
