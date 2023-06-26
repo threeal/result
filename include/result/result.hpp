@@ -15,14 +15,25 @@ namespace result {
  * value or an error. It provides a way to propagate and handle errors in a
  * controlled manner.
  *
- * @code{.cpp}
- * result::Result<int> res = 32;
- * assert(res.is_ok());
- * assert(res.unwrap() == 32);
+ * Use the `Result` class when you have operations that can succeed and return
+ * a value, or fail and return an error. This allows you to handle both cases
+ * explicitly and make informed decisions based on the outcome.
  *
- * res = error::Error("undefined error");
- * assert(res.is_err());
- * assert(res.unwrap_err().message == "undefined error");
+ * @code{.cpp}
+ * class Image;
+ *
+ * result::Result<Image> load_image(const std::filesystem::path& path);
+ *
+ * int main() {
+ *   const auto res = load_image(image_path);
+ *   if (res.is_ok()) {
+ *     const auto& image = res.unwrap();
+ *     // Do something with the image.
+ *   } else {
+ *     const auto& error = res.unwrap_err();
+ *     // Handle the error case.
+ *   }
+ * }
  * @endcode
  */
 template <typename T = Ok>
@@ -39,8 +50,11 @@ class Result {
    * error by default.
    *
    * @code{.cpp}
-   * result::Result<int> res;
+   * result::Result<> res;
    * assert(res.is_err());
+   *
+   * // Print "the result is uninitialized".
+   * std::cout << res.unwrap_err().what() << std::endl;
    * @endcode
    */
   Result() : Result(error::Error("the result is uninitialized")) {}
@@ -50,8 +64,11 @@ class Result {
    * @param val The value.
    *
    * @code{.cpp}
-   * result::Result<int> res = 32;
+   * result::Result<int> res = 200;
    * assert(res.is_ok());
+   *
+   * // Print "200".
+   * std::cout << res.unwrap() << std::endl;
    * @endcode
    */
   Result(const T& val) : data(val), data_is_err(false) {}
@@ -63,6 +80,9 @@ class Result {
    * @code{.cpp}
    * result::Result<int> res = error::Error("undefined error");
    * assert(res.is_err());
+   *
+   * // Print "undefined error".
+   * std::cout << res.unwrap_err().what() << std::endl;
    * @endcode
    */
   Result(const error::Error& err) : data(err), data_is_err(true) {}
@@ -71,24 +91,34 @@ class Result {
    * @brief Explicitly converts the result into another result with a different
    * value type.
    * @tparam U The target value type.
+   * @return A converted result.
    *
    * This conversion operator allows explicit casting of the result into another
    * result with a different value type. If the result contains a value, that
    * value will be explicitly casted into the target value type. If the result
-   * contains an error, copy that error. See also `result::Result::as`.
+   * contains an error, the error will be copied. See also `result::Result::as`.
    *
    * @code{.cpp}
-   * result::Result<int> int_res = 32;
-   * auto float_res = static_cast<result::Result<float>>(int_res);
-   * assert(float_res.is_ok());
-   * assert(float_res.unwrap() == 32);
-   * @endcode
+   * using IntRes = result::Result<int>;
    *
-   * @code{.cpp}
-   * result::Result<int> int_res = error::Error("undefined error");
-   * auto float_res = static_cast<result::Result<float>>(int_res);
-   * assert(float_res.is_err());
-   * assert(float_res.unwrap_err().message == "undefined error");
+   * result::Result<double> square_root(double val) {
+   *   if (value < 0) return error::Error("value must be positive");
+   *   return std::sqrt(value);
+   * }
+   *
+   * int main() {
+   *   IntRes res = static_cast<IntRes>(square_root(100.0));
+   *   assert(res.is_ok());
+   *
+   *   // Print "10".
+   *   std::cout << res.unwrap() << std::endl;
+   *
+   *   res = static_cast<IntRes>(square_root(-100.0));
+   *   assert(res.is_err());
+   *
+   *   // Print "value must be positive".
+   *   std::cout << res.unwrap_err().what() << std::endl;
+   * }
    * @endcode
    */
   template <typename U>
@@ -100,25 +130,32 @@ class Result {
   /**
    * @brief Converts the result into another result with a different value type.
    * @tparam U The target value type.
-   * @return A converted result of the target type.
+   * @return A converted result.
    *
    * This function allows converting the result into another result with a
    * different value type. If the result contains a value, it will be explicitly
-   * casted into the target value type. If the result contains an error, copy
-   * that error.
+   * casted into the target value type. If the result contains an error, the
+   * error will be copied.
    *
    * @code{.cpp}
-   * result::Result<int> int_res = 32;
-   * result::Result<float> float_res = int_res.as<float>();
-   * assert(float_res.is_ok());
-   * assert(float_res.unwrap() == 32);
-   * @endcode
+   * result::Result<double> square_root(double val) {
+   *   if (value < 0) return error::Error("value must be positive");
+   *   return std::sqrt(value);
+   * }
    *
-   * @code{.cpp}
-   * result::Result<int> int_res = error::Error("undefined error");
-   * result::Result<float> float_res = int_res.as<float>();
-   * assert(float_res.is_err());
-   * assert(float_res.unwrap_err().message == "undefined error");
+   * int main() {
+   *   result::Result<int> res = square_root(100.0).as<int>();
+   *   assert(res.is_ok());
+   *
+   *   // Print "10".
+   *   std::cout << res.unwrap() << std::endl;
+   *
+   *   res = square_root(-100.0).as<int>();
+   *   assert(res.is_err());
+   *
+   *   // Print "value must be positive".
+   *   std::cout << res.unwrap_err().what() << std::endl;
+   * }
    * @endcode
    */
   template <typename U>
@@ -150,13 +187,15 @@ class Result {
    * `error::Error`.
    *
    * @code{.cpp}
-   * result::Result<int> res = 32;
-   * assert(res.unwrap() == 32);
-   * @endcode
+   * result::Result<int> res = 200;
    *
-   * @code{.cpp}
-   * result::Result<int> res = error::Error("undefined error");
-   * res.unwrap();  // throws error::Error
+   * // Print "200".
+   * std::cout << res.unwrap() << std::endl;
+   *
+   * res = error::Error("undefined error");
+   *
+   * // Throws `error::Error`.
+   * // std::cout << res.unwrap() << std::endl;
    * @endcode
    */
   const T& unwrap() const {
@@ -176,12 +215,14 @@ class Result {
    *
    * @code{.cpp}
    * result::Result<int> res = error::Error("undefined error");
-   * assert(res.unwrap_err().message == "undefined error");
-   * @endcode
    *
-   * @code{.cpp}
-   * result::Result<int> res = 32;
-   * res.unwrap_err();  // throws error::Error
+   * // Print "undefined error".
+   * std::cout << res.unwrap_err().what() << std::endl;
+   *
+   * res = 200;
+   *
+   * // Throws `error::Error`.
+   * // std::cout << res.unwrap_err().what() << std::endl;
    * @endcode
    */
   const error::Error& unwrap_err() const {
