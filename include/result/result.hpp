@@ -43,7 +43,7 @@ class Result {
    * assert(res.is_err());
    * @endcode
    */
-  Result() : Result(error::Error("result is uninitialized")) {}
+  Result() : Result(error::Error("the result is uninitialized")) {}
 
   /**
    * @brief Constructs a new result that contains a value.
