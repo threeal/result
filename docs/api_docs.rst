@@ -1,8 +1,8 @@
 API Documentation
 =================
 
-.. doxygenclass:: res::Result
+.. doxygenclass:: result::Result
    :members:
 
-.. doxygenstruct:: res::Ok
+.. doxygenstruct:: result::Ok
    :members:
