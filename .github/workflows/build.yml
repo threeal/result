@@ -24,3 +24,21 @@ jobs:
         uses: threeal/cmake-action@v1.1.0
         with:
           cxx-compiler: cl
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3.5.3
+
+      - name: Install requirements
+        run: |
+          sudo apt-get install -y doxygen
+          pip3 install -r docs/requirements.txt
+
+      - name: Generate Doxygen API documentation
+        working-directory: docs
+        run: doxygen
+
+      - name: Build documentation with Sphinx
+        run: sphinx-build -b html docs build/html
