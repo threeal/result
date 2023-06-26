@@ -1,15 +1,19 @@
 #pragma once
 
-namespace res {
+namespace result {
 
-/** A type that represents an ok status (success).
- * Use this type on res::Result<> to set the status of that data to be ok.
+/**
+ * @brief Represents a successful (OK) status.
  *
- * @code
- * res::Result<> result = res::Ok();
- * assert(result.is_ok());
+ * The `Ok` struct is used in conjunction with `result::Result` to indicate a
+ * successful status. It serves as a marker type to set the status of the result
+ * to OK when no specific value is needed.
+ *
+ * @code{.cpp}
+ * result::Result<> res = result::Ok{};
+ * assert(res.is_ok());
  * @endcode
  */
 struct Ok {};
 
-}  // namespace res
+}  // namespace result

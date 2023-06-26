@@ -5,22 +5,35 @@
 
 #include "ok.hpp"
 
-namespace res {
+namespace result {
 
-/** A type used for returning and propagating a value or an error.
- * This type could either have an ok status (success) which contains a value or
- * an error status (failure) which contains an error.
- * is ok.
+/**
+ * @brief Represents a result type that can contain either a value or an error.
  * @tparam T The type of the value.
  *
- * @code
- * res::Result<int> result_of_int = 32;
- * assert(result_of_int.is_ok());
- * assert(result_of_int.unwrap() == 32);
+ * The `Result` class is used to handle operations that can produce either a
+ * value or an error. It provides a way to propagate and handle errors in a
+ * controlled manner.
  *
- * result_of_int = error::Error("undefined error");
- * assert(result_of_int.is_err());
- * assert(result_of_int.unwrap_err().message == "undefined error");
+ * Use the `Result` class when you have operations that can succeed and return
+ * a value, or fail and return an error. This allows you to handle both cases
+ * explicitly and make informed decisions based on the outcome.
+ *
+ * @code{.cpp}
+ * class Image;
+ *
+ * result::Result<Image> load_image(const std::filesystem::path& path);
+ *
+ * int main() {
+ *   const auto res = load_image(image_path);
+ *   if (res.is_ok()) {
+ *     const auto& image = res.unwrap();
+ *     // Do something with the image.
+ *   } else {
+ *     const auto& error = res.unwrap_err();
+ *     // Handle the error case.
+ *   }
+ * }
  * @endcode
  */
 template <typename T = Ok>
@@ -30,45 +43,82 @@ class Result {
   bool data_is_err;
 
  public:
-  /** Construct a new empty result-of.
-   * Defaults to contain an error.
+  /**
+   * @brief Constructs a new empty result.
    *
-   * @code
-   * res::Result<int> result_of_int;
-   * assert(result_of_int.is_err());
+   * This constructor creates a new result object that is initialized with an
+   * error by default.
+   *
+   * @code{.cpp}
+   * result::Result<> res;
+   * assert(res.is_err());
+   *
+   * // Print "the result is uninitialized".
+   * std::cout << res.unwrap_err().what() << std::endl;
    * @endcode
    */
-  Result() : Result(error::Error("result-of is uninitialized")) {}
+  Result() : Result(error::Error("the result is uninitialized")) {}
 
-  /** Construct a new ok result-of (success) that contains a value.
+  /**
+   * @brief Constructs a new result that contains a value.
    * @param val The value.
    *
-   * @code
-   * res::Result<int> result_of_int = 32;
-   * assert(result_of_int.is_ok());
+   * @code{.cpp}
+   * result::Result<int> res = 200;
+   * assert(res.is_ok());
+   *
+   * // Print "200".
+   * std::cout << res.unwrap() << std::endl;
    * @endcode
    */
   Result(const T& val) : data(val), data_is_err(false) {}
 
-  /** Construct a new error result-of (failure).
-   * @param err The error status.
+  /**
+   * @brief Constructs a new result that contains an error.
+   * @param err The error.
    *
-   * @code
-   * res::Result<int> result_of_int = error::Error("undefined error");
-   * assert(result_of_int.is_err());
+   * @code{.cpp}
+   * result::Result<int> res = error::Error("undefined error");
+   * assert(res.is_err());
+   *
+   * // Print "undefined error".
+   * std::cout << res.unwrap_err().what() << std::endl;
    * @endcode
    */
   Result(const error::Error& err) : data(err), data_is_err(true) {}
 
-  /** Explicitly convert into another result-of with a different value type.
-   * If the status is ok, the value data will be cast into the target value
-   * type. See res::Result::as.
-   * @tparam U the target value type.
+  /**
+   * @brief Explicitly converts the result into another result with a different
+   * value type.
+   * @tparam U The target value type.
+   * @return A converted result.
    *
-   * @code
-   * res::Result<int> result_of_int = 32;
-   * auto result_of_float = static_cast<res::Result<float>>(result_of_int);
-   * assert(result_of_float.unwrap() == 32);
+   * This conversion operator allows explicit casting of the result into another
+   * result with a different value type. If the result contains a value, that
+   * value will be explicitly casted into the target value type. If the result
+   * contains an error, the error will be copied. See also `result::Result::as`.
+   *
+   * @code{.cpp}
+   * using IntRes = result::Result<int>;
+   *
+   * result::Result<double> square_root(double val) {
+   *   if (value < 0) return error::Error("value must be positive");
+   *   return std::sqrt(value);
+   * }
+   *
+   * int main() {
+   *   IntRes res = static_cast<IntRes>(square_root(100.0));
+   *   assert(res.is_ok());
+   *
+   *   // Print "10".
+   *   std::cout << res.unwrap() << std::endl;
+   *
+   *   res = static_cast<IntRes>(square_root(-100.0));
+   *   assert(res.is_err());
+   *
+   *   // Print "value must be positive".
+   *   std::cout << res.unwrap_err().what() << std::endl;
+   * }
    * @endcode
    */
   template <typename U>
@@ -77,16 +127,35 @@ class Result {
     return static_cast<U>(std::get<T>(data));
   }
 
-  /** Convert into another result-of with a different value type.
-   * If the status is ok, the value data will be cast into the target value
-   * type.
+  /**
+   * @brief Converts the result into another result with a different value type.
    * @tparam U The target value type.
-   * @return The converted result-of.
+   * @return A converted result.
    *
-   * @code
-   * res::Result<int> result_of_int = 32;
-   * res::Result<float> result_of_float = result_of_int.as<float>();
-   * assert(result_of_float.unwrap() == 32);
+   * This function allows converting the result into another result with a
+   * different value type. If the result contains a value, it will be explicitly
+   * casted into the target value type. If the result contains an error, the
+   * error will be copied.
+   *
+   * @code{.cpp}
+   * result::Result<double> square_root(double val) {
+   *   if (value < 0) return error::Error("value must be positive");
+   *   return std::sqrt(value);
+   * }
+   *
+   * int main() {
+   *   result::Result<int> res = square_root(100.0).as<int>();
+   *   assert(res.is_ok());
+   *
+   *   // Print "10".
+   *   std::cout << res.unwrap() << std::endl;
+   *
+   *   res = square_root(-100.0).as<int>();
+   *   assert(res.is_err());
+   *
+   *   // Print "value must be positive".
+   *   std::cout << res.unwrap_err().what() << std::endl;
+   * }
    * @endcode
    */
   template <typename U>
@@ -95,56 +164,70 @@ class Result {
     return static_cast<U>(std::get<T>(data));
   }
 
-  /** Check if the status is ok.
-   * @return `true` if the status is ok.
+  /**
+   * @brief Checks if the result contains a value.
+   * @return `true` if the result contains a value, `false` otherwise.
    */
   bool is_ok() const { return !data_is_err; }
 
-  /** Check if the status is failed.
-   * @return `true` if the status is failed.
+  /**
+   * @brief Checks if the result contains an error.
+   * @return `true` if the result contains an error, `false` otherwise.
    */
   bool is_err() const { return data_is_err; }
 
-  /** Get the value data if the status is ok.
-   * This function will throw an exception if the status is not ok.
-   * @return The value data.
-   * @exception error::Error The status is not ok.
+  /**
+   * @brief Gets the value from the result.
+   * @return A constant reference to the stored value.
+   * @throws error::Error If the result does not contain a value.
    *
-   * @code
-   * res::Result<int> result_of_int = 32;
-   * assert(result_of_int.unwrap() == 32);
-   * @endcode
+   * This function retrieves the value stored in the result object. If the
+   * result contains a value, it returns a constant reference to the value. If
+   * the result does not contain a value, it throws an exception of type
+   * `error::Error`.
    *
    * @code{.cpp}
-   * res::Result<int> result_of_int = error::Error("undefined error");
-   * result_of_int.unwrap();  // throws exception
+   * result::Result<int> res = 200;
+   *
+   * // Print "200".
+   * std::cout << res.unwrap() << std::endl;
+   *
+   * res = error::Error("undefined error");
+   *
+   * // Throws `error::Error`.
+   * // std::cout << res.unwrap() << std::endl;
    * @endcode
    */
   const T& unwrap() const {
-    if (data_is_err)
-      throw error::Error("Unable to unwrap content of error result-of");
+    if (data_is_err) throw error::format("the result contains an error");
     return std::get<T>(data);
   }
 
-  /** Get the error data if the status is failed.
-   * This function will throw an exception if the status is not failed.
-   * @return The error data.
-   * @exception error::Error The status is not failed.
+  /**
+   * @brief Gets the error from the result.
+   * @return A constant reference to the stored error.
+   * @throws error::Error If the result does not contain an error.
    *
-   * @code
-   * res::Result<int> result_of_int = error::Error("undefined error");
-   * assert(result_of_int.unwrap_err().message == "undefined error");
-   * @endcode
+   * This function retrieves the error stored in the result object. If the
+   * result contains an error, it returns a constant reference to the error. If
+   * the result does not contain an error, it throws an exception of type
+   * `error::Error`.
    *
    * @code{.cpp}
-   * res::Result<int> result_of_int = 32;
-   * result_of_int.unwrap_err();  // throws exception
+   * result::Result<int> res = error::Error("undefined error");
+   *
+   * // Print "undefined error".
+   * std::cout << res.unwrap_err().what() << std::endl;
+   *
+   * res = 200;
+   *
+   * // Throws `error::Error`.
+   * // std::cout << res.unwrap_err().what() << std::endl;
    * @endcode
    */
   const error::Error& unwrap_err() const {
-    if (!data_is_err)
-      throw error::Error("Unable to unwrap error of ok result-of");
+    if (!data_is_err) throw error::Error("the result contains a value");
     return std::get<error::Error>(data);
   }
 };
-}  // namespace res
+}  // namespace result
