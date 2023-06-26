@@ -1,9 +1,8 @@
 API Documentation
 =================
 
-.. toctree::
-   :maxdepth: 2
+.. doxygenclass:: res::Result
+   :members:
 
-   api_docs/result.rst
-   api_docs/result_of.rst
-   api_docs/utils.rst
+.. doxygenstruct:: res::Ok
+   :members:
