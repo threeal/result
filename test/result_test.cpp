@@ -86,7 +86,7 @@ TEST_CASE("Result rewriting") {
 }
 
 TEST_CASE("Result from function getting") {
-  const auto square_root = [](int value) -> result::Result<int> {
+  const auto square_root = [](double value) -> result::Result<double> {
     if (value < 0) return error::Error("value must be positive");
     return std::sqrt(value);
   };
