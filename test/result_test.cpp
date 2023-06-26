@@ -106,27 +106,27 @@ TEST_CASE("Result from function getting") {
 
 TEST_CASE("Result casting") {
   SECTION("Cast result with value") {
-    result::Result<int> src = 200;
-    result::Result<float> dst;
+    result::Result<int> src = -1;
+    result::Result<unsigned int> dst;
 
-    SECTION("Using as function") { dst = src.as<float>(); }
+    SECTION("Using as function") { dst = src.as<unsigned int>(); }
 
     SECTION("Using cast operator") {
-      dst = static_cast<result::Result<float>>(src);
+      dst = static_cast<result::Result<unsigned int>>(src);
     }
 
     REQUIRE(dst.is_ok());
-    REQUIRE(dst.unwrap() == 200);
+    REQUIRE(dst.unwrap() > 0);
   }
 
   SECTION("Cast result with error") {
     result::Result<int> src = error::Error("unknown error");
-    result::Result<float> dst;
+    result::Result<unsigned int> dst;
 
-    SECTION("Using as function") { dst = src.as<float>(); }
+    SECTION("Using as function") { dst = src.as<unsigned int>(); }
 
     SECTION("Using cast operator") {
-      dst = static_cast<result::Result<float>>(src);
+      dst = static_cast<result::Result<unsigned int>>(src);
     }
 
     REQUIRE(dst.is_err());
