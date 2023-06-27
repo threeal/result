@@ -57,7 +57,7 @@ class Result {
    * std::cout << res.unwrap_err().what() << std::endl;
    * @endcode
    */
-  Result() : Result(error::Error("the result is uninitialized")) {}
+  Result();
 
   /**
    * @brief Constructs a new result that contains a value.
@@ -71,7 +71,7 @@ class Result {
    * std::cout << res.unwrap() << std::endl;
    * @endcode
    */
-  Result(const T& val) : data(val), data_is_err(false) {}
+  Result(const T& val);
 
   /**
    * @brief Constructs a new result that contains an error.
@@ -85,7 +85,7 @@ class Result {
    * std::cout << res.unwrap_err().what() << std::endl;
    * @endcode
    */
-  Result(const error::Error& err) : data(err), data_is_err(true) {}
+  Result(const error::Error& err);
 
   /**
    * @brief Explicitly converts the result into another result with a different
@@ -122,10 +122,7 @@ class Result {
    * @endcode
    */
   template <typename U>
-  explicit operator Result<U>() const {
-    if (data_is_err) return std::get<error::Error>(data);
-    return static_cast<U>(std::get<T>(data));
-  }
+  explicit operator Result<U>() const;
 
   /**
    * @brief Converts the result into another result with a different value type.
@@ -159,10 +156,7 @@ class Result {
    * @endcode
    */
   template <typename U>
-  Result<U> as() const {
-    if (data_is_err) return std::get<error::Error>(data);
-    return static_cast<U>(std::get<T>(data));
-  }
+  Result<U> as() const;
 
   /**
    * @brief Checks if the result contains a value.
@@ -198,10 +192,7 @@ class Result {
    * // std::cout << res.unwrap() << std::endl;
    * @endcode
    */
-  const T& unwrap() const {
-    if (data_is_err) throw error::format("the result contains an error");
-    return std::get<T>(data);
-  }
+  const T& unwrap() const;
 
   /**
    * @brief Gets the error from the result.
@@ -225,9 +216,42 @@ class Result {
    * // std::cout << res.unwrap_err().what() << std::endl;
    * @endcode
    */
-  const error::Error& unwrap_err() const {
-    if (!data_is_err) throw error::Error("the result contains a value");
-    return std::get<error::Error>(data);
-  }
+  const error::Error& unwrap_err() const;
 };
+
+template <typename T>
+Result<T>::Result() : Result(error::Error("the result is uninitialized")) {}
+
+template <typename T>
+Result<T>::Result(const T& val) : data(val), data_is_err(false) {}
+
+template <typename T>
+Result<T>::Result(const error::Error& err) : data(err), data_is_err(true) {}
+
+template <typename T>
+template <typename U>
+Result<T>::operator Result<U>() const {
+  if (data_is_err) return std::get<error::Error>(data);
+  return static_cast<U>(std::get<T>(data));
+}
+
+template <typename T>
+template <typename U>
+Result<U> Result<T>::as() const {
+  if (data_is_err) return std::get<error::Error>(data);
+  return static_cast<U>(std::get<T>(data));
+}
+
+template <typename T>
+const T& Result<T>::unwrap() const {
+  if (data_is_err) throw error::format("the result contains an error");
+  return std::get<T>(data);
+}
+
+template <typename T>
+const error::Error& Result<T>::unwrap_err() const {
+  if (!data_is_err) throw error::Error("the result contains a value");
+  return std::get<error::Error>(data);
+}
+
 }  // namespace result
