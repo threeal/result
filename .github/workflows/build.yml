@@ -36,10 +36,6 @@ jobs:
           sudo apt-get install -y doxygen
           pip3 install -r docs/requirements.txt
 
-      - name: Generate Doxygen API documentation
-        working-directory: docs
-        run: doxygen
-
       - name: Build documentation with Sphinx
         run: sphinx-build -b html docs build/html -W --keep-going
 
