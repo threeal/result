@@ -13,6 +13,8 @@ jobs:
 
       - name: Configure and build this project
         uses: threeal/cmake-action@v1.2.0
+        with:
+          run-build: true
 
   release-msvc:
     runs-on: windows-latest
@@ -24,6 +26,7 @@ jobs:
         uses: threeal/cmake-action@v1.2.0
         with:
           cxx-compiler: cl
+          run-build: true
 
   docs:
     runs-on: ubuntu-latest

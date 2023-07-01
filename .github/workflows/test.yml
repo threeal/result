@@ -53,6 +53,7 @@ jobs:
           generator: Ninja
           cxx-flags: -Werror
           args: -DBUILD_TESTING=ON
+          run-build: true
 
   check-warning-msvc:
     runs-on: windows-latest
@@ -66,6 +67,7 @@ jobs:
           cxx-compiler: cl
           cxx-flags: /WX
           args: -DBUILD_TESTING=ON
+          run-build: true
 
   check-formatting:
     runs-on: ubuntu-latest
@@ -76,4 +78,5 @@ jobs:
       - name: Configure and check formatting
         uses: threeal/cmake-action@v1.2.0
         with:
-          targets: format check-format
+          run-build: true
+          build-args: --target format --target check-format
