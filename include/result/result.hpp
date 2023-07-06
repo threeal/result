@@ -37,7 +37,7 @@ namespace result {
  * @endcode
  */
 template <typename T = Ok>
-class Result {
+class [[nodiscard]] Result {
  private:
   std::variant<T, error::Error> data;
   bool data_is_err;
