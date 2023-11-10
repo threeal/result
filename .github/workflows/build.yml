@@ -2,9 +2,8 @@ name: build
 on:
   workflow_dispatch:
   pull_request:
-    branches: ['*', '!latest']
   push:
-    branches: [latest, main]
+    branches: [main]
 jobs:
   release:
     runs-on: ubuntu-latest
