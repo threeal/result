@@ -43,7 +43,7 @@ jobs:
         run: sphinx-build -b html docs build/html -W --keep-going
 
       - name: Upload documentation as artifact
-        uses: actions/upload-artifact@v3.1.3
+        uses: actions/upload-artifact@v4.0.0
         with:
           name: html
           path: build/html
