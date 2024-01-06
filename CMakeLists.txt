@@ -23,7 +23,11 @@ target_include_directories(result INTERFACE include)
 target_link_libraries(result INTERFACE error)
 
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
-  cpmaddpackage("gh:threeal/Format.cmake#auto-install-cmake-format")
+  cpmaddpackage(
+    GITHUB_REPOSITORY threeal/Format.cmake
+    GIT_TAG auto-install-cmake-format
+    OPTIONS "FORMAT_SKIP_CMAKE ON"
+  )
 
   if(BUILD_TESTING)
     enable_testing()
