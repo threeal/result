@@ -24,8 +24,8 @@ target_link_libraries(result INTERFACE error)
 
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
   cpmaddpackage(
-    GITHUB_REPOSITORY threeal/Format.cmake
-    GIT_TAG auto-install-cmake-format
+    GITHUB_REPOSITORY TheLartians/Format.cmake
+    VERSION 1.8.0
     OPTIONS "FORMAT_SKIP_CMAKE ON"
   )
 
