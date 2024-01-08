@@ -15,8 +15,6 @@ jobs:
         id: cmake_action
         uses: threeal/cmake-action@v1.3.0
         with:
-          generator: Ninja
-          cxx-compiler: clang++
           args: -DBUILD_TESTING=ON
           run-test: true
 
@@ -38,7 +36,6 @@ jobs:
       - name: Configure and build this project
         uses: threeal/cmake-action@v1.3.0
         with:
-          generator: Ninja
           cxx-flags: -Werror
           args: -DBUILD_TESTING=ON
           run-build: true
@@ -52,7 +49,6 @@ jobs:
       - name: Configure and build this project
         uses: threeal/cmake-action@v1.3.0
         with:
-          cxx-compiler: cl
           cxx-flags: /WX
           args: -DBUILD_TESTING=ON
           run-build: true
