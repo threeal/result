@@ -25,6 +25,7 @@ jobs:
         with:
           gcov-executable: llvm-cov gcov
           excludes: build/*
+          fail-under-line: 99
 
   check-warning:
     runs-on: ubuntu-latest
