@@ -1,7 +1,7 @@
 Result
 ======
 
-|build_status_badge|_ |test_status_badge|_ |code_coverage_badge|_
+|build_status_badge|_ |test_status_badge|_
 
 A simple C++ implementation of `Rust Result`_, an alternative to `Abseil Status`_.
 
@@ -16,9 +16,6 @@ A simple C++ implementation of `Rust Result`_, an alternative to `Abseil Status`
 
 .. |test_status_badge| image:: https://img.shields.io/github/actions/workflow/status/threeal/result/test.yml?label=test&branch=main
 .. _test_status_badge: https://github.com/threeal/result/actions/workflows/test.yml
-
-.. |code_coverage_badge| image:: https://img.shields.io/coveralls/github/threeal/result/main
-.. _code_coverage_badge: https://coveralls.io/github/threeal/result
 
 .. _Abseil Status: https://abseil.io/docs/cpp/guides/status
 .. _Rust Result: https://doc.rust-lang.org/std/result
