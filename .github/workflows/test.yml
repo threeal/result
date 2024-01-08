@@ -20,14 +20,11 @@ jobs:
           args: -DBUILD_TESTING=ON
           run-test: true
 
-      - name: Generate and send code coverage report to Coveralls
-        if: steps.cmake_action.outcome == 'success' || steps.cmake_action.outcome == 'failure'
+      - name: Check coverage
         uses: threeal/gcovr-action@v1.0.0
         with:
           gcov-executable: llvm-cov gcov
           excludes: build/*
-          coveralls-send: true
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
   check-warning:
     runs-on: ubuntu-latest
