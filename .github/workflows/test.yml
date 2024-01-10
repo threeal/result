@@ -21,7 +21,6 @@ jobs:
       - name: Check coverage
         uses: threeal/gcovr-action@v1.0.0
         with:
-          gcov-executable: llvm-cov gcov
           excludes: build/*
           fail-under-line: 99
 
