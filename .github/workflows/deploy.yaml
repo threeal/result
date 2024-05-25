@@ -1,0 +1,38 @@
+name: Deploy
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+jobs:
+  deploy-pages:
+    name: Deploy Pages
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pages: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy-pages.outputs.page_url }}
+    concurrency:
+      group: pages
+      cancel-in-progress: true
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v4.1.2
+
+      - name: Install Requirements
+        run: |
+          sudo apt-get install -y doxygen
+          pip3 install -r docs/requirements.txt
+
+      - name: Build Documentation
+        run: sphinx-build -b html docs build/html -W --keep-going
+
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3.0.1
+        with:
+          path: build/html
+
+      - name: Deploy Pages
+        id: deploy-pages
+        uses: actions/deploy-pages@v4.0.5
