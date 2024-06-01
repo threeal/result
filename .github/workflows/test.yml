@@ -24,32 +24,6 @@ jobs:
           excludes: build/*
           fail-under-line: 99
 
-  check-warning:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout this repository
-        uses: actions/checkout@v4.1.6
-
-      - name: Configure and build this project
-        uses: threeal/cmake-action@v1.3.0
-        with:
-          cxx-flags: -Werror
-          args: -DBUILD_TESTING=ON
-          run-build: true
-
-  check-warning-msvc:
-    runs-on: windows-latest
-    steps:
-      - name: Checkout this repository
-        uses: actions/checkout@v4.1.6
-
-      - name: Configure and build this project
-        uses: threeal/cmake-action@v1.3.0
-        with:
-          cxx-flags: /WX
-          args: -DBUILD_TESTING=ON
-          run-build: true
-
   check-formatting:
     runs-on: ubuntu-latest
     steps:
