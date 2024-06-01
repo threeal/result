@@ -4,13 +4,13 @@ project(result)
 
 set(CMAKE_CXX_STANDARD 17)
 
-if(MSVC)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /permissive- /W4 /w14640 /EHsc")
-else()
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wnon-virtual-dtor -Wpedantic")
-endif()
-
 include(cmake/CPM.cmake)
+
+if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR AND BUILD_TESTING)
+  cpmaddpackage(gh:threeal/CheckWarning.cmake@2.1.1)
+  include(${CheckWarning_SOURCE_DIR}/cmake/CheckWarning.cmake)
+  add_check_warning()
+endif()
 
 cpmaddpackage(
   NAME error
