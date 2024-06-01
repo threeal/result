@@ -1,6 +1,6 @@
 #pragma once
 
-#include <error/error.hpp>
+#include <errors/error.hpp>
 #include <variant>
 
 #include "ok.hpp"
@@ -39,7 +39,7 @@ namespace result {
 template <typename T = Ok>
 class [[nodiscard]] Result {
  private:
-  std::variant<T, error::Error> data;
+  std::variant<T, errors::Error> data;
   bool data_is_err;
 
  public:
@@ -78,14 +78,14 @@ class [[nodiscard]] Result {
    * @param err The error.
    *
    * @code{.cpp}
-   * result::Result<int> res = error::Error("undefined error");
+   * result::Result<int> res = errors::make("undefined error");
    * assert(res.is_err());
    *
    * // Print "undefined error".
    * std::cout << res.unwrap_err().what() << std::endl;
    * @endcode
    */
-  Result(const error::Error& err);
+  Result(const errors::Error& err);
 
   /**
    * @brief Explicitly converts the result into another result with a different
@@ -102,7 +102,7 @@ class [[nodiscard]] Result {
    * using IntRes = result::Result<int>;
    *
    * result::Result<double> square_root(double val) {
-   *   if (value < 0) return error::Error("value must be positive");
+   *   if (value < 0) return errors::make("value must be positive");
    *   return std::sqrt(value);
    * }
    *
@@ -136,7 +136,7 @@ class [[nodiscard]] Result {
    *
    * @code{.cpp}
    * result::Result<double> square_root(double val) {
-   *   if (value < 0) return error::Error("value must be positive");
+   *   if (value < 0) return errors::make("value must be positive");
    *   return std::sqrt(value);
    * }
    *
@@ -173,12 +173,12 @@ class [[nodiscard]] Result {
   /**
    * @brief Gets the value from the result.
    * @return A constant reference to the stored value.
-   * @throws error::Error If the result does not contain a value.
+   * @throws errors::Error If the result does not contain a value.
    *
    * This function retrieves the value stored in the result object. If the
    * result contains a value, it returns a constant reference to the value. If
    * the result does not contain a value, it throws an exception of type
-   * `error::Error`.
+   * `errors::Error`.
    *
    * @code{.cpp}
    * result::Result<int> res = 200;
@@ -186,9 +186,9 @@ class [[nodiscard]] Result {
    * // Print "200".
    * std::cout << res.unwrap() << std::endl;
    *
-   * res = error::Error("undefined error");
+   * res = errors::make("undefined error");
    *
-   * // Throws `error::Error`.
+   * // Throws `errors::Error`.
    * // std::cout << res.unwrap() << std::endl;
    * @endcode
    */
@@ -197,26 +197,26 @@ class [[nodiscard]] Result {
   /**
    * @brief Gets the error from the result.
    * @return A constant reference to the stored error.
-   * @throws error::Error If the result does not contain an error.
+   * @throws errors::Error If the result does not contain an error.
    *
    * This function retrieves the error stored in the result object. If the
    * result contains an error, it returns a constant reference to the error. If
    * the result does not contain an error, it throws an exception of type
-   * `error::Error`.
+   * `errors::Error`.
    *
    * @code{.cpp}
-   * result::Result<int> res = error::Error("undefined error");
+   * result::Result<int> res = errors::make("undefined error");
    *
    * // Print "undefined error".
    * std::cout << res.unwrap_err().what() << std::endl;
    *
    * res = 200;
    *
-   * // Throws `error::Error`.
+   * // Throws `errors::Error`.
    * // std::cout << res.unwrap_err().what() << std::endl;
    * @endcode
    */
-  const error::Error& unwrap_err() const;
+  const errors::Error& unwrap_err() const;
 };
 
 }  // namespace result
