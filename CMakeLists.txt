@@ -12,15 +12,11 @@ if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR AND BUILD_TESTING)
   add_check_warning()
 endif()
 
-cpmaddpackage(
-  NAME error
-  GIT_TAG f9b39f8
-  GITHUB_REPOSITORY threeal/cpp
-  SOURCE_SUBDIR error)
+cpmaddpackage(gh:threeal/errors-cpp@1.0.0)
 
 add_library(result INTERFACE)
 target_include_directories(result INTERFACE include)
-target_link_libraries(result INTERFACE error)
+target_link_libraries(result INTERFACE errors)
 
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
   cpmaddpackage(
