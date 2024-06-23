@@ -30,8 +30,12 @@ jobs:
       - name: Checkout this repository
         uses: actions/checkout@v4.1.7
 
-      - name: Configure and check formatting
+      - name: Configure Project
         uses: threeal/cmake-action@v1.3.0
         with:
-          run-build: true
-          build-args: --target format --target check-format
+          options: BUILD_TESTING=ON
+
+      - name: Check Formatting
+        run: |
+          cmake --build build --target format-all
+          git diff --exit-code HEAD

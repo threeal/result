@@ -19,12 +19,6 @@ target_include_directories(result INTERFACE include)
 target_link_libraries(result INTERFACE errors)
 
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
-  cpmaddpackage(
-    GITHUB_REPOSITORY TheLartians/Format.cmake
-    VERSION 1.8.0
-    OPTIONS "FORMAT_SKIP_CMAKE ON"
-  )
-
   if(BUILD_TESTING)
     enable_testing()
 
@@ -40,4 +34,8 @@ if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     target_link_libraries(result_test PRIVATE result Catch2::Catch2WithMain)
     catch_discover_tests(result_test)
   endif()
+
+  cpmaddpackage(gh:threeal/FixFormat.cmake@1.1.1)
+  include(${FixFormat_SOURCE_DIR}/cmake/FixFormat.cmake)
+  add_fix_format()
 endif()
