@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.21)
 
 project(result)
 
@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 include(cmake/CPM.cmake)
 
-if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR AND BUILD_TESTING)
+if(PROJECT_IS_TOP_LEVEL AND BUILD_TESTING)
   cpmaddpackage(gh:threeal/CheckWarning.cmake@2.1.1)
   include(${CheckWarning_SOURCE_DIR}/cmake/CheckWarning.cmake)
   add_check_warning()
@@ -18,7 +18,7 @@ add_library(result INTERFACE)
 target_include_directories(result INTERFACE include)
 target_link_libraries(result INTERFACE errors)
 
-if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+if(PROJECT_IS_TOP_LEVEL)
   cpmaddpackage(
     GITHUB_REPOSITORY TheLartians/Format.cmake
     VERSION 1.8.0
