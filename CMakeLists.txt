@@ -4,9 +4,11 @@ project(result)
 
 set(CMAKE_CXX_STANDARD 17)
 
+option(RESULT_ENABLE_TESTS "Enable test targets.")
+
 include(cmake/CPM.cmake)
 
-if(PROJECT_IS_TOP_LEVEL AND BUILD_TESTING)
+if(PROJECT_IS_TOP_LEVEL AND RESULT_ENABLE_TESTS)
   cpmaddpackage(gh:threeal/CheckWarning.cmake@2.1.1)
   include(${CheckWarning_SOURCE_DIR}/cmake/CheckWarning.cmake)
   add_check_warning()
@@ -25,7 +27,7 @@ if(PROJECT_IS_TOP_LEVEL)
     OPTIONS "FORMAT_SKIP_CMAKE ON"
   )
 
-  if(BUILD_TESTING)
+  if(RESULT_ENABLE_TESTS)
     enable_testing()
 
     cpmaddpackage(gh:catchorg/Catch2@3.6.0)

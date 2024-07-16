@@ -15,7 +15,7 @@ jobs:
         id: cmake_action
         uses: threeal/cmake-action@v1.3.0
         with:
-          args: -DBUILD_TESTING=ON
+          options: RESULT_ENABLE_TESTS=ON
           run-test: true
 
       - name: Check coverage
