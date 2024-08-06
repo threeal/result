@@ -11,12 +11,13 @@ jobs:
       - name: Checkout this repository
         uses: actions/checkout@v4.1.7
 
-      - name: Configure, build, and test this project
-        id: cmake_action
-        uses: threeal/cmake-action@v1.3.0
+      - name: Configure and build this project
+        uses: threeal/cmake-action@v2.0.0
         with:
           options: RESULT_ENABLE_TESTS=ON
-          run-test: true
+
+      - name: Test this project
+        uses: threeal/ctest-action@v1.1.0
 
       - name: Check coverage
         uses: threeal/gcovr-action@v1.0.0
@@ -31,7 +32,6 @@ jobs:
         uses: actions/checkout@v4.1.7
 
       - name: Configure and check formatting
-        uses: threeal/cmake-action@v1.3.0
+        uses: threeal/cmake-action@v2.0.0
         with:
-          run-build: true
           build-args: --target format --target check-format
