@@ -6,7 +6,7 @@ on:
     branches: [main]
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout this repository
         uses: actions/checkout@v4.1.7
@@ -15,7 +15,7 @@ jobs:
         uses: threeal/cmake-action@v2.0.0
 
   release-msvc:
-    runs-on: windows-latest
+    runs-on: windows-2022
     steps:
       - name: Checkout this repository
         uses: actions/checkout@v4.1.7
@@ -24,7 +24,7 @@ jobs:
         uses: threeal/cmake-action@v2.0.0
 
   docs:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4.1.7
