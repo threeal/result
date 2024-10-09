@@ -9,7 +9,7 @@ option(RESULT_ENABLE_TESTS "Enable test targets.")
 include(cmake/CPM.cmake)
 
 if(PROJECT_IS_TOP_LEVEL AND RESULT_ENABLE_TESTS)
-  cpmaddpackage(gh:threeal/CheckWarning.cmake@3.0.0)
+  cpmaddpackage(gh:threeal/CheckWarning.cmake@3.1.0)
   add_check_warning(TREAT_WARNINGS_AS_ERRORS)
 endif()
 
