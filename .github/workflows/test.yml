@@ -6,7 +6,7 @@ on:
     branches: [main]
 jobs:
   unit-tests:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout this repository
         uses: actions/checkout@v4.2.2
@@ -26,7 +26,7 @@ jobs:
           fail-under-line: 99
 
   check-formatting:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout this repository
         uses: actions/checkout@v4.2.2
