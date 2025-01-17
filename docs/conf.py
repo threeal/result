@@ -1,7 +1,7 @@
 import os, subprocess
 
 project = 'result'
-copyright = '2022-2024, Alfi Maulana'
+copyright = '2022-2025, Alfi Maulana'
 author = 'Alfi Maulana'
 
 extensions = ['breathe']
