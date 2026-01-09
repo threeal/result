@@ -8,7 +8,7 @@ License
 
 This project is licensed under the terms of the `MIT License`_.
 
-Copyright © 2022-2025 `Alfi Maulana`_
+Copyright © 2022-2026 `Alfi Maulana`_
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
